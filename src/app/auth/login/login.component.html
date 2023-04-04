@@ -1,60 +1,39 @@
 <div class="overlay">
-  <!-- LOGN IN FORM by Omar Dsoky -->
-  <form>
-    <!--   con = Container  for items in the form-->
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="con">
-      <!--     Start  header Content  -->
       <header class="head-form">
         <h2>Log In</h2>
-        <!--     A welcome message or an explanation of the login form -->
         <p>login here using your username and password</p>
       </header>
-      <!--     End  header Content  -->
       <br />
       <div class="field-set">
-        <!--   user name -->
         <span class="input-item">
           <i class="fa fa-user-circle"></i>
         </span>
-        <!--   user name Input-->
-        <input
-          class="form-input"
-          id="txt-input"
-          type="text"
-          placeholder="@UserName"
-          required
-        />
-
+        <input class="form-input" id="txt-input" type="text" placeholder="@UserName" formControlName="email" />
+        <p *ngIf=" loginForm.controls['email'].touched &&  loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('pattern') "
+        style="color: red"> PLease Enter a valid E-mail</p>
         <br />
-
-        <!--   Password -->
-
         <span class="input-item">
           <i class="fa fa-key"></i>
         </span>
-        <!--   Password Input-->
-        <input
-          class="form-input"
-          type="password"
-          placeholder="Password"
-          id="pwd"
-          name="password"
-          required
-        />
-        <span>
-          <i class="fa fa-eye" aria-hidden="true" type="button" id="eye"></i>
-        </span>
+        <input  matInput [type]="showPassword ? 'password' : 'text'" class="form-input" placeholder="Password" id="pwd" name="password" formControlName="password" />
+        <mat-icon matSuffix (click)="togglePasswordVisibility()">{{showPassword?'visibility_off':'visibility'}}</mat-icon>
+        <p style=" color: red;" *ngIf="loginForm.controls['password'].touched &&  loginForm.controls['password'].hasError('required') || loginForm.controls['password'].hasError('pattern') ">
+            Password must contain more than 8 characters, 1 upper case letter, and
+            1 special character
+        </p>
 
         <br />
-        <button class="log-in">Log In</button>
+        <button type="submit" class="log-in">Log In</button>
       </div>
       <div class="other">
-        <button class="btn submits frgt-pass">Forgot Password</button>
-        <button class="btn submits sign-up">
-          Sign Up
-          <i class="fa fa-user-plus" aria-hidden="true"></i>
-        </button>
+        <button class="btn submits frgt-pass" (click)="moveToForgotPassword()">Forgot Password</button>
       </div>
+      <button type="button" class="btn submits sign-up" (click)="signIn()">
+        Sign Up
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
+      </button>
     </div>
   </form>
 </div>

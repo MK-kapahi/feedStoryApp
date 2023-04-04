@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { FireBaseService } from 'src/app/service/fire-base.service';
+import { REGEX } from 'src/app/utils/constant';
 
 @Component({
   selector: 'app-sign-up',
@@ -6,5 +11,62 @@ import { Component } from '@angular/core';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent {
+  
+  signUpForm!: FormGroup;
+  showPassword: boolean =false;
+  validateDateOfbirth: boolean =false;
+  constructor(private fb : FormBuilder, private fireService : FireBaseService ,private route : Router ,private toaster : ToastrService){
+    this.signUpForm = this.fb.group({
+      email:['', Validators.compose([Validators.required,Validators.pattern(REGEX.EMAIL)])],
+      password:['',Validators.compose([Validators.required,Validators.pattern(REGEX.PASSWORD)])]
+    })
+  }
+  public togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+  
+  validateDOB(e: Event){
+    
+    const year = new Date((e.target as HTMLInputElement).value).getFullYear();
+    const today = new Date().getFullYear();
+    
+    if( (today-year) < 12 || (today -year)>100){
+      this.validateDateOfbirth= true
+      
+    }else{
+      this.validateDateOfbirth = false
+    }
+    
+  }
+  Replace(event :any) {
+    event.target.value = event.target.value.replace(/[^0-9]/g, '')
+  }
+  RegisterUser() {
+   if(this.signUpForm.valid)
+   {
+    console.log(this.signUpForm.value);
+        this.fireService.SignUp(this.signUpForm.value['email'] , this.signUpForm.value['password']).then(()=>{
+          this.toaster.success('User Registered Successfully', 'Sucesss',
+          {
+            titleClass: "center",
+            messageClass: "center"
+          })
+        }).catch((error)=>{
+          this.toaster.error(error,'Error', {
+            titleClass: "center",
+              messageClass: "center",
+          });
+        });
+   }
 
+   else{
+    
+      Object.keys(this.signUpForm.controls).forEach(key=>this.signUpForm.controls[key].markAsTouched({onlySelf:true}))
+   }
+  }
+
+  login()
+  {
+      this.route.navigate(['login'])
+  }
 }
