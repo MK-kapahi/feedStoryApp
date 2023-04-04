@@ -25,19 +25,6 @@ export class SignUpComponent {
     this.showPassword = !this.showPassword;
   }
   
-  validateDOB(e: Event){
-    
-    const year = new Date((e.target as HTMLInputElement).value).getFullYear();
-    const today = new Date().getFullYear();
-    
-    if( (today-year) < 12 || (today -year)>100){
-      this.validateDateOfbirth= true
-      
-    }else{
-      this.validateDateOfbirth = false
-    }
-    
-  }
   Replace(event :any) {
     event.target.value = event.target.value.replace(/[^0-9]/g, '')
   }

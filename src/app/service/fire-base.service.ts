@@ -3,13 +3,15 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../utils/modal';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FireBaseService {
 
-  constructor(public auth: AngularFireAuth , private route : Router , private toaster : ToastrService) { }
+  userData : any ;
+  constructor(public auth: AngularFireAuth , private route : Router , private toaster : ToastrService ,public afAuth: AngularFireAuth ,public afs: AngularFirestore) { }
 
   SignIn(email: string, password: string) {
     return this.auth
@@ -27,15 +29,13 @@ export class FireBaseService {
       });
   }
 
-  SignUp(email: string, password: string) {
+  SignUp(email: string, password: string ) {
     return this.auth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         console.log(result);
-        /* Call the SendVerificaitonMail() function when new user sign 
-        up and returns promise */
         this.SendVerificationMail();
-       // this.SetUserData(result.user);
+       this.SetUserData(result.user);
       })
       .catch((error) => {
         this.toaster.error(error.message,'Error', {
@@ -80,20 +80,27 @@ export class FireBaseService {
     return !localStorage.getItem('token')
   }
 
-  // SetUserData(user: any) {
-  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-  //     `users/${user.uid}`
-  //   );
-  //   const userData: User = {
-  //     uid: user.uid,
-  //     email: user.email,
-  //     displayName: user.displayName,
-  //     photoURL: user.photoURL,
-  //     emailVerified: user.emailVerified,
-  //     phoneNo: user.phoneNo
-  //   };
-  //   return userRef.set(userData, {
-  //     merge: true,
-  //   });
-  // }
+  SetUserData(user: any) {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${user.uid}`
+    );
+    const userData: User = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+      phoneNumber: user.phoneNumber
+    };
+    return userRef.set(userData, {
+      merge: true,
+    });
+  }
+
+  SignOut() {
+    return this.afAuth.signOut().then(() => {
+      localStorage.removeItem('user');
+      this.route.navigate(['sign-in']);
+    });
+}
 }

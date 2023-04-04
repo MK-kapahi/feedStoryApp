@@ -11,6 +11,10 @@ import { environment } from 'src/environment';
 import { FireBaseService } from './service/fire-base.service';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 
 
 @NgModule({
@@ -28,7 +32,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       timeOut: 10000,
       positionClass: 'toast-top-center',
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    AngularFireStorageModule,
+    AngularFirestoreModule
   ],
   providers: [FireBaseService],
   bootstrap: [AppComponent],

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FireBaseService } from 'src/app/service/fire-base.service';
 
 @Component({
   selector: 'app-home',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  constructor(public firebase : FireBaseService){}
 }
