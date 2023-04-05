@@ -6,6 +6,7 @@ import { ForgotComponent } from './forgot/forgot.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 
 const route : Routes = [
@@ -17,13 +18,18 @@ const route : Routes = [
   },
   {
     path : 'forgot' , component: ForgotComponent 
+  },
+  {
+    path : 'verify-email-address' , component : VerifyEmailComponent
   }
+
 ]
 @NgModule({
   declarations: [
     LoginComponent,
     SignUpComponent,
-    ForgotComponent
+    ForgotComponent,
+    VerifyEmailComponent
   ],
   imports: [
     CommonModule,

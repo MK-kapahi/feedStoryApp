@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ToastrService } from 'ngx-toastr';
-import { User } from '../utils/modal';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { getDocs, collection, getDoc, doc } from 'firebase/firestore';
+import { getDocs, collection, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/environment';
 import { InstaUserService } from './insta-user.service';
+import { getAuth } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +14,32 @@ import { InstaUserService } from './insta-user.service';
 export class FireBaseService {
 
   userData : any ;
+  authState = getAuth();
   constructor(public auth: AngularFireAuth,private instaUser : InstaUserService , private route : Router , private toaster : ToastrService ,public afAuth: AngularFireAuth) { }
 
-  SignIn(email: string, password: string) {
+  async SignIn(email: string, password: string) {
     return this.auth
       .signInWithEmailAndPassword(email, password)
-      .then((result:any) => {
-        console.log(result.user._delegate)
-        localStorage.setItem('token',result.user._delegate.accessToken)
-        localStorage.setItem('id',result.user.uid)
-        this.route.navigate(['home']);
+      .then(async (result:any) => {
+        console.log(result.user)
+        if(result.user.emailVerified)
+        {
+          localStorage.setItem('token',result.user._delegate.accessToken)
+          localStorage.setItem('id',result.user.uid)
+          this.route.navigate(['home']);
+          const tutorialsRef = doc( db , "users" , result.user.uid)
+         await  updateDoc( tutorialsRef , {
+            'emailVerified' : result.user.emailVerified
+          })
+        }
+
+        else
+        {
+           this.toaster.warning('Please Verify Your Email '," warning",{
+            titleClass: "center",
+            messageClass: "center",
+           })
+        }
       })
       .catch((error) => {
         this.toaster.error(error.message,'Error', {
@@ -57,8 +73,14 @@ export class FireBaseService {
   }
 
   SendVerificationMail() {
-    return this.auth.currentUser
-      .then((u: any) => u.sendEmailVerification())
+    return this.auth.currentUser 
+    .then((u: any) => u.sendEmailVerification()).then( async () => {
+        this.route.navigate(['verify-email-address']);
+        // if (this.auth.currentUser.emailVerified) {
+        //     console.log("Email Verified!");
+        //     this.route.navigate(['login']);
+        // }
+      });
   }
 
 

@@ -4,6 +4,8 @@ import { HomeComponent } from './home/home.component';
 import {  RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { AuthGaurdService } from '../utils/gaurds/auth-gaurd.service';
+import { ProfileComponent } from './profile/profile.component';
+
 
 const route : Routes = [
   {
@@ -13,7 +15,8 @@ const route : Routes = [
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
