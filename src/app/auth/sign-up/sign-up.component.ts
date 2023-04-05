@@ -17,7 +17,7 @@ export class SignUpComponent {
   validateDateOfbirth: boolean =false;
   constructor(private fb : FormBuilder, private fireService : FireBaseService ,private route : Router ,private toaster : ToastrService){
     this.signUpForm = this.fb.group({
-      displayName :['',Validators.compose([Validators.required])],
+      displayName :['',Validators.compose([Validators.required , Validators.pattern(REGEX.USERNAME)])],
       email:['', Validators.compose([Validators.required,Validators.pattern(REGEX.EMAIL)])],
       phoneNumber : ['',Validators.compose([Validators.required])],
       password:['',Validators.compose([Validators.required,Validators.pattern(REGEX.PASSWORD)])]
@@ -34,19 +34,8 @@ export class SignUpComponent {
    if(this.signUpForm.valid)
    {
     console.log(this.signUpForm.value);
-        this.fireService.SignUp(this.signUpForm.value['email'] , this.signUpForm.value['password'], this.signUpForm.value).then(()=>{
-          this.toaster.success('User Registered Successfully', 'Sucesss',
-          {
-            titleClass: "center",
-            messageClass: "center"
-          })
-        }).catch((error)=>{
-          this.toaster.error(error,'Error', {
-            titleClass: "center",
-              messageClass: "center",
-          });
-        });
-   }
+        this.fireService.SignUp(this.signUpForm.value['email'] , this.signUpForm.value['password'], this.signUpForm.value)}
+        
 
    else{
     

@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../utils/modal';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { getDocs, collection, getDoc, doc } from 'firebase/firestore';
+import { db } from 'src/environment';
+import { InstaUserService } from './insta-user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +14,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat
 export class FireBaseService {
 
   userData : any ;
-  constructor(public auth: AngularFireAuth , private route : Router , private toaster : ToastrService ,public afAuth: AngularFireAuth ,public afs: AngularFirestore) { }
+  constructor(public auth: AngularFireAuth,private instaUser : InstaUserService , private route : Router , private toaster : ToastrService ,public afAuth: AngularFireAuth) { }
 
   SignIn(email: string, password: string) {
     return this.auth
@@ -19,6 +22,7 @@ export class FireBaseService {
       .then((result:any) => {
         console.log(result.user._delegate)
         localStorage.setItem('token',result.user._delegate.accessToken)
+        localStorage.setItem('id',result.user.uid)
         this.route.navigate(['home']);
       })
       .catch((error) => {
@@ -34,10 +38,17 @@ export class FireBaseService {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
        const user = userCredential.user
+       console.log(user)
+       this.toaster.success('User Registered Successfully', 'Sucesss',
+          {
+            titleClass: "center",
+            messageClass: "center"
+          })
         this.SendVerificationMail();
-       this.SetUserData(user , data);
+       this.instaUser.SetUserData(user , data);
       })
       .catch((error) => {
+        console.log(error)
         this.toaster.error(error.message,'Error', {
           titleClass: "center",
             messageClass: "center",
@@ -50,12 +61,6 @@ export class FireBaseService {
       .then((u: any) => u.sendEmailVerification())
   }
 
-  signInusingObject(userCredential : any)
-  {
-    return this.auth.signInWithCredential(userCredential).then((result)=>{
-      console.log(result);
-    })
-  }
 
   ForgotPassword(passwordResetEmail: string) {
     return this.auth
@@ -79,41 +84,13 @@ export class FireBaseService {
   isLoggedIn(): boolean {
     return !localStorage.getItem('token')
   }
-
-  SetUserData(user: any, data: any) {
-
-    const userData: User = {
-        uid: user.uid,
-        email: data.email,
-        displayName: data.displayName,
-        emailVerified: user.emailVerified,
-        phoneNumber: data.phoneNumber
-      };
-      // this.client.httpPost(ConstantData.Api.user , userData).subscribe((response)=>{
-      //   console.log(response)
-      // })
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `users/${user.uid}`
-    );
-    return userRef.set(userData, {
-      merge: true,
-    }).then((response)=>{
-      console.log("hvjhvgjhbhbh"+response);
-    });
-    // const userData: User = {
-    //   uid: user.uid,
-    //   email: user.email,
-    //   displayName: user.displayName,
-     
-    //   emailVerified: user.emailVerified,
-    //   phoneNumber: user.phoneNumber
-    // };
-
-  }
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
       this.route.navigate(['sign-in']);
     });
-}
+
+
+  }
+
 }

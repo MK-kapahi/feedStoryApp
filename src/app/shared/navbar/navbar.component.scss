@@ -63,20 +63,7 @@ html {
     }
   }
   
-  .twitter {
-    position: relative;
-    width: 75%;
-    float: right;
-    height: 100vh;
-    
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-    
+ 
     a {
       position: relative;
       
@@ -94,4 +81,3 @@ html {
       font-weight: bold;
       margin-top: 20px;
     }
-  }
