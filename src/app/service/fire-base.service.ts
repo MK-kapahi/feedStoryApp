@@ -29,13 +29,13 @@ export class FireBaseService {
       });
   }
 
-  SignUp(email: string, password: string ) {
+  SignUp(email: string, password: string ,data:any) {
     return this.auth
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        console.log(result);
+      .then((userCredential) => {
+       const user = userCredential.user
         this.SendVerificationMail();
-       this.SetUserData(result.user);
+       this.SetUserData(user , data);
       })
       .catch((error) => {
         this.toaster.error(error.message,'Error', {
@@ -80,23 +80,36 @@ export class FireBaseService {
     return !localStorage.getItem('token')
   }
 
-  SetUserData(user: any) {
+  SetUserData(user: any, data: any) {
+
+    const userData: User = {
+        uid: user.uid,
+        email: data.email,
+        displayName: data.displayName,
+        emailVerified: user.emailVerified,
+        phoneNumber: data.phoneNumber
+      };
+      // this.client.httpPost(ConstantData.Api.user , userData).subscribe((response)=>{
+      //   console.log(response)
+      // })
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
     );
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
-      phoneNumber: user.phoneNumber
-    };
     return userRef.set(userData, {
       merge: true,
+    }).then((response)=>{
+      console.log("hvjhvgjhbhbh"+response);
     });
-  }
+    // const userData: User = {
+    //   uid: user.uid,
+    //   email: user.email,
+    //   displayName: user.displayName,
+     
+    //   emailVerified: user.emailVerified,
+    //   phoneNumber: user.phoneNumber
+    // };
 
+  }
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');

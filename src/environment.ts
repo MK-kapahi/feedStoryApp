@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-
+import { getFirestore } from "firebase/firestore"
 export const environment={
     production: false,
     firebaseConfig : {
@@ -16,4 +16,8 @@ export const environment={
 
 const app = initializeApp(environment.firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app)
 
+
+
+export const baseUrl = "https://feedstoryapp-default-rtdb.firebaseio.com/"

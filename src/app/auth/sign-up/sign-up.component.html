@@ -6,9 +6,18 @@
         <span><i class="icon icon-user"></i></span>
     </div>
     <div class="form-group">
+        <input type="text" class="form-control item" id="username" placeholder="Username" formControlName="displayName">
+        <p *ngIf="signUpForm.controls['displayName'].touched &&  signUpForm.controls['displayName'].hasError('required') "
+        style="color: red"> Name is required </p>
+    </div>
+    <div class="form-group">
         <input type="email" class="form-control item" id="email" placeholder="Email" formControlName="email">
         <p *ngIf=" signUpForm.controls['email'].touched &&  signUpForm.controls['email'].hasError('required') || signUpForm.controls['email'].hasError('pattern') "
         style="color: red"> PLease Enter a valid E-mail</p>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control item" id="phone-number"   (input)="Replace($event)"  placeholder="Phone Number" formControlName="phoneNumber">
+        <p *ngIf="signUpForm.controls['phoneNumber'].touched &&  signUpForm.controls['phoneNumber'].hasError('required')|| signUpForm.controls['phoneNumber'].hasError('pattern')" style="color: red"> Please Enter a valid Number </p>
     </div>
     <div class="form-group">
         <input  matInput [type]="showPassword ? 'password' : 'text'" class="form-control item"  id="password" placeholder="Password" formControlName="password">

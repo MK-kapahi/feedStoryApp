@@ -8,3 +8,10 @@ export const REGEX = {
     DOMAIN:/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/,
     ACCOUNT_NUMBER:/^[0-9]{9,18}$/
   };
+
+  export const ConstantData = 
+{
+  Api :{
+    user : 'User.json'
+  }
+}
