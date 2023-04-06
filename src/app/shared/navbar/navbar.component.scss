@@ -1,83 +1,81 @@
-html {
-    font-family: Arial;
-    font-size: 16px;
-    background: #5e42a6;
-  }
-  
-  .sidebar {
-    position: fixed;
-    width: 25%;
-    height: 100vh;
-    background: #312450;
-    font-size: 0.65em;
-  }
-  
-  .nav {
-    position: relative;
-    margin: 0 15%;
-    text-align: right;
-    top: 50%;
-    transform: translateY(-50%);
-    font-weight: bold;
-  }
-  
-  .nav ul {
-    list-style: none;
-    
-    li {
-      position: relative;
-      margin: 3.2em 0;
-      
-      a {
-        line-height: 5em;
-        text-transform: uppercase;
-        text-decoration: none;
-        letter-spacing: 0.4em;
-        color: rgba(#FFF, 0.35);
-        display: block;
-        transition: all ease-out 300ms;
-      }
-      
-      &.active a {
-        color: white;
-      }
-      
-      &:not(.active)::after {
-        opacity: 0.2;
-      }
-      
-      &:not(.active):hover a {
-        color: rgba(#FFF, 0.75);
-      }
-      
-      &::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 0.2em;
-        background: black;
-        left: 0;
-        bottom: 0;
-        background-image: linear-gradient(to right, #5e42a6, #b74e91)
-      }
-    }
-  }
-  
- 
-    a {
-      position: relative;
-      
-      img {
-        width: 48px;
-        height: 48px;
-      }
-    }
-    
-    p {
-      text-transform: uppercase;
-      font-size: 1em;
-      letter-spacing: 0.1em;
-      color: #FFF;
-      font-weight: bold;
-      margin-top: 20px;
-    }
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
+
+body {
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+/* Toggle Styles */
+
+#viewport {
+  padding-left: 250px;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#content {
+  width: 100%;
+  position: relative;
+  margin-right: 0;
+}
+
+/* Sidebar Styles */
+
+#sidebar {
+  z-index: 1000;
+  position: fixed;
+  left: 250px;
+  width: 250px;
+  height: 100%;
+  margin-left: -250px;
+  overflow-y: auto;
+  background: #37474F;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#sidebar header {
+  background-color: #263238;
+  font-size: 20px;
+  line-height: 52px;
+  text-align: center;
+}
+
+#sidebar header a {
+  color: #fff;
+  display: block;
+  text-decoration: none;
+}
+
+#sidebar header b:hover {
+  color: #fff;
+}
+
+#sidebar .nav{
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+#sidebar .nav button{
+  background: none;
+  //border-bottom: 1px solid #455A64;
+  color: #CFD8DC;
+  font-size: 14px;
+  padding: 16px 24px;
+  border: none;
+}
+
+#sidebar .nav button:hover{
+  background: none;
+  color: #ECEFF1;
+}
+
+#sidebar .nav button i{
+  margin-right: 16px;
+}

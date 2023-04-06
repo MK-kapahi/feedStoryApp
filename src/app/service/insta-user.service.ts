@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { getDocs, collection, doc, getDoc, query, where, arrayUnion } from 'firebase/firestore';
+import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
+import { getDocs, collection, doc, getDoc, query, where, arrayUnion, FieldValue } from 'firebase/firestore';
 import { db } from 'src/environment';
 import { Post, PostModal, User } from '../utils/modal';
 import { AngularFireStorage  } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,11 @@ import { getAuth } from 'firebase/auth';
 export class InstaUserService {
   auth = getAuth();
   uid : string = '';
+  postId:string = '';
+  userDetails = new Subject<DocumentData>
+  GetPost = new Subject<DocumentData>
+  postType : string =''
+  AllPostSubject = new Subject<DocumentData>
   constructor(public afs: AngularFirestore,public Fireauth: AngularFireAuth , private store : AngularFireStorage) { }
   SetUserData(user: any, data: any) {
 
@@ -38,26 +44,20 @@ export class InstaUserService {
 
   async getUsers() 
   {
-    // const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-    //   `users`
-    // );
-
     const querySnapshot = await getDocs(collection(db, "users"));
     querySnapshot.forEach((doc) => {
       console.log(doc.id ,'=>', doc.data());
     });
   }
 
-  //   getCurrentUser()
-  // {
-  //     this.Fireauth.currentUser.then((response:any)=>{
-  //       this.uid = response.uid;
-  //       console.log(this.uid);
-  //       this.getDetails()
-  //       console.log("xcvcfbfgb",response);
-  //      })
-
-  // }
+  async AllPosts()
+  {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    querySnapshot.forEach((doc) => {
+      this.AllPostSubject.next(doc.data())
+      console.log(doc.id ,'=>', doc.data());
+    });
+  }
 
  async getDetails()
   {
@@ -66,7 +66,7 @@ export class InstaUserService {
       const querySnapshot = await getDocs(qureyForCurrentUser);
       querySnapshot.forEach((doc) => {
         console.log(doc.data())
-     return  doc.data();
+         this.userDetails.next(doc.data())
    });
   }
   uploadImage(File : any)
@@ -80,7 +80,9 @@ export class InstaUserService {
         .snapshotChanges()
         .toPromise()
         .then((res:any) => {
-          console.log(res)
+          console.log(res.metadata)
+          this.postId = res.metadata.generation;
+          this.postType = res.metadata.type;
           fileRef.getDownloadURL().subscribe((url) => {
             resolve(url);
           });
@@ -89,33 +91,82 @@ export class InstaUserService {
     });
   }
 
-  addPost( uid : string , discription : any , url : any , type :number )
+  addPost( userId : string , discription : any , url : any  )
   {
 
     const postdetails : Post =
     {
-      postId: '',
-      Url: '',
-      Type: 0,
-      createdAt: '',
+      postId: this.postId+new Date().toString(),
+      Url: url,
+      Type: this.postType,
+      createdAt: new Date(),
       Archieve: false,
-      description: '',
+      Description: discription,
       isLiked: false,
       likes: 0,
       Comments: '',
-      updateAt: ''
+      updateAt: new Date()
     }
     const Postdata : PostModal = {
-      uid: uid,
+      uid: userId,
       post : [postdetails]
-
     };
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `users/${uid}`
+      `posts/${userId}`
     );
     return userRef.set(Postdata, {
       merge: true,
     })
+
   }
+
+   getPost()
+  {
+     const id :any = localStorage.getItem("id")
+    // const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+    //   `posts/${userId}`
+    // );
+
+    // const docRef = doc(db, "posts", userId);
+    // const docsnap = await getDocs(docRef);
+
+     this.afs.collection("posts").doc(id).ref.get().then((doc : any)=>{
+      if(doc.exists)
+      {
+        console.log(doc.data())
+        this.GetPost.next(doc.data())
+      }
+    })
+  }
+   
+  updatePostData( userId : string , discription : any , url : any )
+  {
+
+    const postdetails : Post =
+    {
+      postId: this.postId+new Date().toString(),
+      Url: url,
+      Type: this.postType,
+      createdAt: new Date(),
+      Archieve: false,
+      Description: discription,
+      isLiked: false,
+      likes: 0,
+      Comments: '',
+      updateAt: new Date()
+    }
+    const Postdata : PostModal = {
+      uid: userId,
+      post : [postdetails]
+    };
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `posts/${userId}`
+    );
+    return userRef.update({
+       post : arrayUnion(postdetails)
+    })
+
+  }
+
   }
 

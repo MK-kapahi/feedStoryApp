@@ -10,18 +10,25 @@ export interface User {
  export interface Post {
     postId : string;
     Url: string;
-    Type : number ;
-    createdAt : string ;
+    Type : string ;
+    createdAt : Date ;
     Archieve : boolean ;
-    description : string ;
+    Description : string ;
     isLiked : boolean;
     likes : number ;
     Comments : string ;
-    updateAt : string;
+    updateAt : Date;
  }
 
  export interface PostModal 
  {
     uid : string ;
     post : Array<Post>
+ }
+
+ export interface Comments 
+ {
+    sender : string ;
+    receiever : string ;
+    discription : string;
  }

@@ -1,12 +1,14 @@
-<main class="main">
-    <aside class="sidebar">
-      <nav class="nav">
-        <ul>
-          <li class="active"><a >Welcome</a></li>
-          <li><button href="#">Who We Are</button></li>
-          <li><button href="#">What We Do</button></li>
-          <li><button href="#">Get In Touch</button></li>
-        </ul>
-      </nav>
-    </aside>
-  </main>
+<div id="viewport">
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <header>
+      <a href="#">My App</a>
+    </header>
+    <div class="nav" >
+      <button (click)="Home()">Home </button>
+      <button (click)="Logout()">logout </button>
+      <button (click)="CrestePost()" >CreatePost</button>
+    </div>
+  </div>
+</div>
+  <!-- Content -->

@@ -1,11 +1,16 @@
-<div class=" d-flex justify-content-column  ">
-  <div>
-<!-- <app-navbar></app-navbar> -->
-</div>
-
+<!-- <div class=" d-flex justify-content-column">
 <div class="">
 <textarea (change)="DiscriptionEntered($event)"> </textarea>
-<input type="file" accept="image/*" (change)="SelectImage($event)">
+<input type="file" (change)="SelectImage($event)">
 <button type="button" (click)="PostData()"> CreatePost </button>
 </div>
+</div> -->
+
+<div class="d-flex flex-row justify-content-around">
+    <div>
+<app-navbar></app-navbar>
 </div>
+<div class="main-div" >
+<router-outlet></router-outlet>
+</div>
+</div>  

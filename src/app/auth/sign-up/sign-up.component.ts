@@ -45,6 +45,6 @@ export class SignUpComponent {
 
   login()
   {
-      this.route.navigate(['login'])
+      this.route.navigate(['auth/login'])
   }
 }

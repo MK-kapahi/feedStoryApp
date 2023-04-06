@@ -42,7 +42,7 @@ export class LoginComponent {
 
   signIn()
   {
-    this.route.navigate(['sign-in'])
+    this.route.navigate(['auth/sign-in'])
   }
 
   moveToForgotPassword()

@@ -2,11 +2,18 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ToastrService } from 'ngx-toastr';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { getDocs, collection, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/environment';
 import { InstaUserService } from './insta-user.service';
 import { getAuth } from 'firebase/auth';
+
+const actionCodeSettings = {
+  // URL you want to redirect back to. The domain (www.example.com) for this
+  // URL must be in the authorized domains list in the Firebase Console.
+  url: 'https://localhost:4200/main/login',
+  // This must be true.
+  handleCodeInApp: true,
+};
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +22,20 @@ export class FireBaseService {
 
   userData : any ;
   authState = getAuth();
-  constructor(public auth: AngularFireAuth,private instaUser : InstaUserService , private route : Router , private toaster : ToastrService ,public afAuth: AngularFireAuth) { }
+  constructor(public auth: AngularFireAuth,private instaUser : InstaUserService , private route : Router , private toaster : ToastrService ,public afAuth: AngularFireAuth) { 
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        this.userData = user;
+        localStorage.setItem('user', JSON.stringify(this.userData));
+        JSON.parse(localStorage.getItem('user')!);
+      } else {
+        localStorage.setItem('user', 'null');
+        JSON.parse(localStorage.getItem('user')!);
+      }
+    });
+  }
 
-  async SignIn(email: string, password: string) {
+   SignIn(email: string, password: string) {
     return this.auth
       .signInWithEmailAndPassword(email, password)
       .then(async (result:any) => {
@@ -26,9 +44,10 @@ export class FireBaseService {
         {
           localStorage.setItem('token',result.user._delegate.accessToken)
           localStorage.setItem('id',result.user.uid)
-          this.route.navigate(['home']);
+          this.route.navigate(['main']);
+          this.afAuth.authState.subscribe((user) => { });
           const tutorialsRef = doc( db , "users" , result.user.uid)
-         await  updateDoc( tutorialsRef , {
+          await  updateDoc( tutorialsRef , {
             'emailVerified' : result.user.emailVerified
           })
         }
@@ -61,6 +80,7 @@ export class FireBaseService {
             messageClass: "center"
           })
         this.SendVerificationMail();
+        console.log(userCredential);
        this.instaUser.SetUserData(user , data);
       })
       .catch((error) => {
@@ -74,7 +94,8 @@ export class FireBaseService {
 
   SendVerificationMail() {
     return this.auth.currentUser 
-    .then((u: any) => u.sendEmailVerification()).then( async () => {
+    .then((u: any) => 
+    u.sendEmailVerification(actionCodeSettings)).then(  () => {
         this.route.navigate(['verify-email-address']);
         // if (this.auth.currentUser.emailVerified) {
         //     console.log("Email Verified!");
@@ -108,11 +129,16 @@ export class FireBaseService {
   }
   SignOut() {
     return this.afAuth.signOut().then(() => {
+      this.toaster.success('Logout Successfully', 'Sucesss',
+          {
+            titleClass: "center",
+            messageClass: "center"
+          })
       localStorage.removeItem('user');
-      this.route.navigate(['sign-in']);
+      localStorage.removeItem('id');
+      localStorage.removeItem('token');
+      this.route.navigate(['auth']);
     });
-
-
   }
 
 }

@@ -1,0 +1,34 @@
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4 col-sm-12 col-xs-12">
+                <div class="card p-4">
+
+                    <div class="d-flex ">
+                        <h2 class="flex-grow-1 justify-self-center">Create Post </h2>
+                    </div>
+
+                    <div class="d-flex flex-row temp mt-5 mb-3 justify-content-around">
+                        <label> Choose Image </label>
+                        <button class="btn" (click)="post.click()"> <mat-icon>add_a_photo</mat-icon></button>
+                     <input type="file" #post (change)="SelectImage($event)" hidden>
+                    </div>
+
+                    <div class="d-flex flex-row justify-content-around temp mt-5 mb-3 ">
+                        <label> Add Description </label>
+                        <input type="text" (change)="DiscriptionEntered($event)" placeholder="Type Message ..........">
+                    </div>
+
+
+                    <p class="my-1">
+                        <button type="button" (click)="PostData()"> CreatePost </button>
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
