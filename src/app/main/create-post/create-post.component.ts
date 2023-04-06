@@ -34,15 +34,10 @@ export class CreatePostComponent {
   }
     PostData()
     {
-      if(this.Posts.length != 0)
-      {
-        this.user.updatePostData( this.User.uid,this.discriptionMessage,this.URL)
-      }
-      else
-      {
-      console.log(this.User.uid);
-     this.user.addPost( this.User.uid,this.discriptionMessage,this.URL);
-      }
+  
+      this.user.addPost( this.User.uid,this.discriptionMessage,this.URL).then((response)=>{
+        console.log(response)
+      })
     }
 
     DiscriptionEntered(event: any)

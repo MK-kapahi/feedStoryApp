@@ -18,6 +18,7 @@ export class ShowPostComponent implements OnInit{
      this.user.AllPosts();
      this.user.AllPostSubject.subscribe((response)=>{
       console.log("Allll Post ",response)
+      this.Posts.push(response);
      })
   }
 

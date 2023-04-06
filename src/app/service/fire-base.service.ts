@@ -97,10 +97,6 @@ export class FireBaseService {
     .then((u: any) => 
     u.sendEmailVerification(actionCodeSettings)).then(  () => {
         this.route.navigate(['verify-email-address']);
-        // if (this.auth.currentUser.emailVerified) {
-        //     console.log("Email Verified!");
-        //     this.route.navigate(['login']);
-        // }
       });
   }
 

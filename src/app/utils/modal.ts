@@ -23,7 +23,7 @@ export interface User {
  export interface PostModal 
  {
     uid : string ;
-    post : Array<Post>
+    postId : string;
  }
 
  export interface Comments 
