@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit{
     this.user.getPost();
     this.user.GetPost.subscribe((response)=>{
          this.Posts.push(response)
-         console.log(response);
+         //console.log(response);
     })
   }
     // PostData()

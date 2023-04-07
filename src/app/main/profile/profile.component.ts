@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { InstaUserService } from 'src/app/service/insta-user.service';
 
 @Component({
   selector: 'app-profile',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class ProfileComponent {
 
+  constructor(private user : InstaUserService){
+    // this.user.joinCollection().subscribe((response)=>{
+    //   console.log(response);
+    // })
+  }
 }

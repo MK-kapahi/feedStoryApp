@@ -11,16 +11,16 @@ export class AuthGaurdService {
   canActivate(route: ActivatedRouteSnapshot):boolean{
     const { routeConfig } = route;
     const { path } = routeConfig as Route;
-  if ( (path?.includes('main/home') || path?.includes('main/create-Post') )&& !this.service.isLoggedIn()) {
+  if ( (path?.includes('main') )&& !this.service.isLoggedIn()) {
 
     return true;
   }
-  if ((path?.includes('auth/sign-in') || path?.includes('auth/login')) && !this.service.isLoggedIn()) {
+  if ((path?.includes('auth')) && !this.service.isLoggedIn()) {
 
     this.router.navigate(['main/home']);
     return false;
   }
-  if ((path?.includes('auth/sign-in') || path?.includes('auth/login')) && this.service.isLoggedIn()) {
+  if ((path?.includes('auth') ) && this.service.isLoggedIn()) {
 
     return true;
 

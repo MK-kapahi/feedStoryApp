@@ -20,4 +20,9 @@ export class NavbarComponent {
     this.route.navigate(['main/home/create-Post'])
   }
 
+  Profile()
+  {
+    this.route.navigate(['main/home/profile'])
+  }
+
 }

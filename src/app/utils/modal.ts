@@ -26,9 +26,9 @@ export interface User {
     postId : string;
  }
 
- export interface Comments 
- {
-    sender : string ;
-    receiever : string ;
-    discription : string;
+ export interface Comment {
+   username: string;
+   date: Date;
+   text: string;
+   postId : any;
  }

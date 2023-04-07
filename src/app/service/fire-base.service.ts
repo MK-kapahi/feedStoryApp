@@ -6,6 +6,7 @@ import { getDocs, collection, getDoc, doc, updateDoc } from 'firebase/firestore'
 import { db } from 'src/environment';
 import { InstaUserService } from './insta-user.service';
 import { getAuth } from 'firebase/auth';
+import { docJoin } from './joins';
 
 const actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
@@ -44,7 +45,7 @@ export class FireBaseService {
         {
           localStorage.setItem('token',result.user._delegate.accessToken)
           localStorage.setItem('id',result.user.uid)
-          this.route.navigate(['main']);
+          this.route.navigate(['main/home']);
           this.afAuth.authState.subscribe((user) => { });
           const tutorialsRef = doc( db , "users" , result.user.uid)
           await  updateDoc( tutorialsRef , {
@@ -96,7 +97,7 @@ export class FireBaseService {
     return this.auth.currentUser 
     .then((u: any) => 
     u.sendEmailVerification(actionCodeSettings)).then(  () => {
-        this.route.navigate(['verify-email-address']);
+        this.route.navigate(['auth/verify-email-address']);
       });
   }
 
@@ -136,5 +137,6 @@ export class FireBaseService {
       this.route.navigate(['auth']);
     });
   }
+
 
 }

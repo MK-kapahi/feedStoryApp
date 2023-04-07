@@ -8,6 +8,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ShowPostComponent } from './show-post/show-post.component';
+import { CommentComponent } from './comment/comment.component';
+import { CommentBoxComponent } from './comment-box/comment-box.component';
+import { FormsModule } from '@angular/forms';
 
 
 const route : Routes = [
@@ -23,7 +26,10 @@ const route : Routes = [
         path : 'show-Post' , component : ShowPostComponent , 
       },
       {
-        path : 'create-Post' , component : CreatePostComponent , 
+        path : 'create-Post' , component : CreatePostComponent ,
+      },
+      {
+        path : 'profile' , component : ProfileComponent ,
       }
     ]
   },
@@ -35,13 +41,16 @@ const route : Routes = [
     HomeComponent,
     ProfileComponent,
     CreatePostComponent,
-    ShowPostComponent
+    ShowPostComponent,
+    CommentComponent,
+    CommentBoxComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(route),
-    MatIconModule
+    MatIconModule,
+    FormsModule,
   ],
   exports : [RouterModule]
 })

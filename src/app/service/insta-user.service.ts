@@ -3,10 +3,11 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
 import { getDocs, collection, doc, getDoc, query, where, arrayUnion, FieldValue, setDoc } from 'firebase/firestore';
 import { db } from 'src/environment';
-import { Post, PostModal, User } from '../utils/modal';
+import { Comment, Post, PostModal, User } from '../utils/modal';
 import { AngularFireStorage  } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
 import { Subject } from 'rxjs';
+import { docJoin } from './joins';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,8 @@ export class InstaUserService {
   GetPost = new Subject<DocumentData>
   postType : string =''
   AllPostSubject = new Subject<DocumentData>
+  PostOFAuser = new Subject<DocumentData> 
+  CommentsSubject = new Subject
   constructor(public afs: AngularFirestore,public Fireauth: AngularFireAuth , private store : AngularFireStorage) { }
   SetUserData(user: any, data: any) {
 
@@ -46,17 +49,19 @@ export class InstaUserService {
   {
     const querySnapshot = await getDocs(collection(db, "users"));
     querySnapshot.forEach((doc) => {
-      console.log(doc.id ,'=>', doc.data());
+     // console.log(doc.id ,'=>', doc.data());
     });
   }
 
   async AllPosts()
   {
+    let data: DocumentData
     const querySnapshot = await getDocs(collection(db, "postDetail"));
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(async (doc) => {
+      console.log()
       this.AllPostSubject.next(doc.data())
-      console.log(doc.id ,'=>', doc.data());
-    });
+   });      
+
   }
 
  async getDetails()
@@ -65,7 +70,7 @@ export class InstaUserService {
       const qureyForCurrentUser = query(collection(db, "users"), where("uid", "==", uid));
       const querySnapshot = await getDocs(qureyForCurrentUser);
       querySnapshot.forEach((doc) => {
-        console.log(doc.data())
+        //console.log(doc.data())
          this.userDetails.next(doc.data())
    });
   }
@@ -139,7 +144,7 @@ export class InstaUserService {
      this.afs.collection("posts").doc(id).ref.get().then((doc : any)=>{
       if(doc.exists)
       {
-        console.log(doc.data())
+        //console.log(doc.data())
         this.GetPost.next(doc.data())
       }
     })
@@ -174,5 +179,50 @@ export class InstaUserService {
 
   // }
 
+  joinCollection(id:any)
+  {
+   let user = this.afs.doc(`posts`).valueChanges().pipe(
+    docJoin(this.afs , { postId : 'postDetails' })
+   )
+
+   return user;
+  }
+
+
+   addComment(message: string , id : any , name : string)
+   {
+
+       let comment :Comment ={
+         username: name,
+         date: new Date(),
+         text: message,
+         postId: id
+       }
+       let commentRef :AngularFirestoreDocument<any> = this.afs.doc(`comments/${new Date().getTime().toString()}`)
+
+      //  return commentRef.set(comment, {
+      //   merge: true,
+      // }).then((response)=>{
+      //   console.log(response);
+      // })
+
+     this.afs.collection("comments").doc(new Date().getTime().toString()).set(comment).then(() => {
+      console.log("Data successfully written!");
+    })  
+    .catch((error: any) => {
+      console.error("Error writing document: ", error);
+    });
+   }
+
+   async getComments()
+   {
+    let data:any =[] 
+    const querySnapshot = await getDocs(collection(db, "comments"));
+     querySnapshot.forEach((doc) => {
+      //console.log( doc.data());
+      data.push(doc.data())
+    }); 
+    this.CommentsSubject.next(data);
+  }
   }
 
