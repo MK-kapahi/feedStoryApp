@@ -41,72 +41,38 @@
 </article>
 </div>
 </div> -->
-
-<section class="main">
-    <div class="wrapper"> 
-        // left col element
-        <div class="right-col">
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/profile-pic.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">kunaal kumar</p>
-                </div>
-                <button class="action-btn">switch</button>
-            </div>
-            <p class="suggestion-text">Suggestions for you</p>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 9.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 10.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 11.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 12.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 13.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-        </div>
+<div *ngFor="let post of Posts" >
+<div class="instagram-card">
+    <div class="instagram-card-header">
+      <img src="https://scontent-mia1-2.cdninstagram.com/t51.2885-19/s150x150/15047989_1818466471762459_8340285537701068800_a.jpg" class="instagram-card-user-image"/>
+      <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">followmeto</a>
+      <div class="instagram-card-time">{{post.createdAt}}</div>
     </div>
-</section>
+    <div class="intagram-card-image">
+      <img [src]=post.Url  height="600px"/>
+    </div>
+  
+    <div class="instagram-card-content">
+      <p class="likes">18.068 Me gusta</p>
+      <p><a class="instagram-card-content-user" href="https://www.instagram.com/followmeto/">followmeto</a> So excited to have made it to Lapland! Our first stop was sleeping inside a room made entirely of ice at the Kemi Snow Hotel 😱 Stoked that I've ticked this off my bucket list and never have to do it again... Let's just say the novelty of sleeping in -5 degrees temperature quickly wears off (but hey, it was a COOL experience nonetheless) 😜❄️ <a class="hashtag" href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a></p>
+      <p class="comments">ver los 48 comentarios</p>
+      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">sanguine.j@loaf_made</a> wowwwwww
+      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">spainstakeoverWow</a> 😍
+      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">edieandottotravelsSo</a> cool ❄️
+    <hr>
+    </div>
+    
+    <div class="instagram-card-footer">
+      <a class="footer-action-icons" href="#"><i class="fa fa-heart-o"></i></a>
+      <input class="comments-input" type="text" placeholder="Añade un comentario..."/>
+      <a class="footer-action-icons" href="#"><i class="fa fa-ellipsis-h"></i></a>
+    </div>
+	<app-comment-box (add)="onSubmit($event)" >
+  </app-comment-box>
+  <button (click)="addComment(post.postId)"> ADD</button>
+  <div *ngFor="let c of Comments  " >
+	  <app-comment *ngIf="c.postId === post.postId"  [comment]="c"></app-comment>
+	  </div>
+
+  </div>
+</div>	

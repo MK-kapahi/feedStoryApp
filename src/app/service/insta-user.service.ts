@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
-import { getDocs, collection, doc, getDoc, query, where, arrayUnion, FieldValue, setDoc } from 'firebase/firestore';
+import { getDocs, collection, doc, getDoc, query, where, arrayUnion, FieldValue, setDoc, orderBy } from 'firebase/firestore';
 import { db } from 'src/environment';
 import { Comment, Post, PostModal, User } from '../utils/modal';
 import { AngularFireStorage  } from '@angular/fire/compat/storage';
@@ -56,9 +56,9 @@ export class InstaUserService {
   async AllPosts()
   {
     let data: DocumentData
-    const querySnapshot = await getDocs(collection(db, "postDetail"));
+    const querySnapshot = await getDocs( query(collection(db, "postDetail"), orderBy("createdAt", "desc")));
+    console.log(querySnapshot)
     querySnapshot.forEach(async (doc) => {
-      console.log()
       this.AllPostSubject.next(doc.data())
    });      
 
