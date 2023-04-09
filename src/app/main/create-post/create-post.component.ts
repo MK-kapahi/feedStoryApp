@@ -11,11 +11,12 @@ export class CreatePostComponent {
 
 
 
-  FileUpload!: string | Blob;
+  FileUpload!: any
   discriptionMessage : string = '';
   User : any =[] 
   URL : any ;
   Posts : any =[]
+  Type : number = 1
   constructor(public user : InstaUserService ){
     this.user.getDetails();
     this.user.userDetails.subscribe((response : DocumentData)=>{
@@ -35,7 +36,7 @@ export class CreatePostComponent {
     PostData()
     {
   
-      this.user.addPost( this.User.uid,this.discriptionMessage,this.URL).then((response)=>{
+      this.user.addPost( this.User.uid,this.discriptionMessage,this.URL, this.Type).then((response)=>{
         console.log(response)
       })
     }
@@ -49,12 +50,23 @@ export class CreatePostComponent {
     {
 
       this.FileUpload = event.target.files[0];
-      console.log(this.FileUpload)
-      this.user.uploadImage(this.FileUpload).then((res:any)=>{
-        console.log(res);
-        this.URL = res;
 
-      })
+      if(this.FileUpload.type==='video/mp4')
+      {
+        this.user.uploadVideo(this.FileUpload).then((res:any)=>{
+          console.log(res);
+          this.URL = res;
+          this.Type = 2;
+        })
+        }
+        else{
+        console.log(this.FileUpload)
+        this.user.uploadImage(this.FileUpload).then((res:any)=>{
+          console.log(res);
+          this.URL = res;
+        })
+        this.Type = 1;
+        }
     }
        
 }

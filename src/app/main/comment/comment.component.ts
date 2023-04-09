@@ -18,16 +18,12 @@ export class CommentComponent {
   }
 
   onAdd(event: any) {
-    // const comment: Comment = {
-    //   text: "",
-    //   username: 'Kevin',
-    //   votes: 0,
-    //   date: '1 min ago'
-    // }  
-    // if(!this.comment.comments) {
-    //   this.comment.comments = [];
-    // } 
-    // this.comment.comments.unshift(comment);
-    //  this.isEditing = false;
+    const value = event; 
+    console.log(value);
+    if(!this.comment.childComments) {
+      this.comment.childComments = [];
+    } 
+    this.comment.childComments.unshift(value);
+     this.isEditing = false;
   }
 }

@@ -8,6 +8,8 @@ import { AngularFireStorage  } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
 import { Subject } from 'rxjs';
 import { docJoin } from './joins';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,7 @@ export class InstaUserService {
   AllPostSubject = new Subject<DocumentData>
   PostOFAuser = new Subject<DocumentData> 
   CommentsSubject = new Subject
-  constructor(public afs: AngularFirestore,public Fireauth: AngularFireAuth , private store : AngularFireStorage) { }
+  constructor(private route : Router,public afs: AngularFirestore,public Fireauth: AngularFireAuth , private store : AngularFireStorage , private  toaster : ToastrService ) { }
   SetUserData(user: any, data: any) {
 
     const userData: User = {
@@ -96,14 +98,38 @@ export class InstaUserService {
     });
   }
 
-  addPost( userId : string , discription : any , url : any  )
+  uploadVideo(file: File) {
+    const vedioPath = `vedios/${Date.now()}_${File.name}`;
+    const storageRef = this.store.ref(vedioPath);
+   // const videoRef = storageRef.child(`videos/${file.name}`);
+   // const task = videoRef.put(file);
+   const task = this.store.upload(vedioPath,File)
+   return new Promise((resolve, reject) => {
+    task
+      .snapshotChanges()
+      .toPromise()
+      .then((res:any) => {
+        console.log(res.metadata)
+        this.postId = res.metadata.generation;
+        this.postType = res.metadata.type;
+        storageRef.getDownloadURL().subscribe((url) => {
+          resolve(url);
+        });
+      })
+      .catch((error) => reject(error));
+  });
+    // task.then(snapshot => {
+    //   const downloadURL = snapshot.downloadURL;
+    // });
+  }
+  addPost( userId : string , discription : any , url : any ,type : number )
   {
 
     const postdetails : Post =
     {
       postId: this.postId+new Date(),
       Url: url,
-      Type: this.postType,
+      Type: type,
       createdAt: new Date(),
       Archieve: false,
       Description: discription,
@@ -123,6 +149,12 @@ export class InstaUserService {
     this.setPostData(postdetails)
     return postRef.set(Postdata, {
       merge: true,
+    }).then(()=>{
+      this.toaster.success('image Posted  successfull'," success",{
+        titleClass: "center",
+        messageClass: "center",
+       })
+       this.route.navigate(['main/home'])
     })
 
   }
@@ -157,7 +189,6 @@ export class InstaUserService {
   //   {
   //     postId: this.postId+new Date().toString(),
   //     Url: url,
-  //     Type: this.postType,
   //     createdAt: new Date(),
   //     Archieve: false,
   //     Description: discription,
@@ -176,7 +207,7 @@ export class InstaUserService {
   //   // return userRef.update({
   //   //    post : arrayUnion(postdetails)
   //   // })
-
+  
   // }
 
   joinCollection(id:any)
@@ -196,7 +227,10 @@ export class InstaUserService {
          username: name,
          date: new Date(),
          text: message,
-         postId: id
+         postId: id,
+         commentId: new Date().getTime().toString(),
+         parentCommentId: null,
+         childComments : []
        }
        let commentRef :AngularFirestoreDocument<any> = this.afs.doc(`comments/${new Date().getTime().toString()}`)
 
@@ -207,6 +241,7 @@ export class InstaUserService {
       // })
 
      this.afs.collection("comments").doc(new Date().getTime().toString()).set(comment).then(() => {
+      
       console.log("Data successfully written!");
     })  
     .catch((error: any) => {
@@ -224,5 +259,17 @@ export class InstaUserService {
     }); 
     this.CommentsSubject.next(data);
   }
+
+    // addNestedComments(name : string , message : string , id : string , )
+    // {
+     
+    //    const nestedComment : Comment ={
+
+    //   } 
+   
+    //   this.
+    // }
+
+
   }
 

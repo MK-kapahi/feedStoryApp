@@ -51,6 +51,33 @@
     <div class="intagram-card-image">
       <img [src]=post.Url  height="600px"/>
     </div>
+	<div class="intagram-card-image" *ngIf="post.Type===2">
+		<vg-player>
+			<vg-overlay-play></vg-overlay-play>
+	   <vg-buffering></vg-buffering>
+	 
+	   <vg-controls>
+		   <vg-play-pause></vg-play-pause>
+		   <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+	 
+		   <vg-scrub-bar>
+			  <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+			  <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+		   </vg-scrub-bar>
+	 
+		   <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+	 
+		   <vg-track-selector></vg-track-selector>
+		   <vg-mute></vg-mute>
+		   <vg-volume></vg-volume>
+	 
+		   <vg-fullscreen></vg-fullscreen>
+	   </vg-controls>
+			<video [vgMedia]="$any(media)" #media id="singleVideo" preload="auto" crossorigin>
+				<source src="{{post.Url}}" type="video/mp4">
+			</video>
+		</vg-player>
+	</div>
   
     <div class="instagram-card-content">
       <p class="likes">18.068 Me gusta</p>
@@ -67,9 +94,8 @@
       <input class="comments-input" type="text" placeholder="Añade un comentario..."/>
       <a class="footer-action-icons" href="#"><i class="fa fa-ellipsis-h"></i></a>
     </div>
-	<app-comment-box (add)="onSubmit($event)" >
+	<app-comment-box (add)="onSubmit($event , post.postId)" [postId]="post.postId">
   </app-comment-box>
-  <button (click)="addComment(post.postId)"> ADD</button>
   <div *ngFor="let c of Comments  " >
 	  <app-comment *ngIf="c.postId === post.postId"  [comment]="c"></app-comment>
 	  </div>

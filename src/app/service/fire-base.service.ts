@@ -51,6 +51,11 @@ export class FireBaseService {
           await  updateDoc( tutorialsRef , {
             'emailVerified' : result.user.emailVerified
           })
+
+          this.toaster.success('Logged In Successfull'," success",{
+            titleClass: "center",
+            messageClass: "center",
+           })
         }
 
         else

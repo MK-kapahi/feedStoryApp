@@ -10,7 +10,7 @@ export interface User {
  export interface Post {
     postId : string;
     Url: string;
-    Type : string ;
+    Type : number ;
     createdAt : Date ;
     Archieve : boolean ;
     Description : string ;
@@ -27,6 +27,9 @@ export interface User {
  }
 
  export interface Comment {
+   commentId: string;
+   parentCommentId:null| string;
+   childComments?: Comment[];
    username: string;
    date: Date;
    text: string;

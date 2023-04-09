@@ -9,6 +9,8 @@ import { Comment } from 'src/app/utils/modal';
 export class CommentBoxComponent {
   value!: string;
   @Output() add = new EventEmitter<string>();
+  @Input()
+  postId!: string;
   post() {
     if (this.value.trim()) {
       console.log(this.value)

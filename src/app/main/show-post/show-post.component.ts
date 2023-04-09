@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { DocumentData } from 'firebase/firestore';
 import { InstaUserService } from 'src/app/service/insta-user.service';
 
@@ -11,7 +12,11 @@ export class ShowPostComponent implements OnInit{
   
   
   currentUserDetails: any =[]
-  constructor(private user : InstaUserService){}
+  
+  constructor(private user : InstaUserService , private client : HttpClient){
+  }
+
+ 
   messageTobeCommented : string =''
   Posts : any =[];
   Comments : any=[];
@@ -20,6 +25,8 @@ export class ShowPostComponent implements OnInit{
     this.user.userDetails.subscribe((response : DocumentData)=>{
       this.currentUserDetails = response
     })
+
+  
      this.user.AllPosts();
      this.user.AllPostSubject.subscribe((response)=>{
        //console.log("Allll Post ",response)
@@ -36,12 +43,15 @@ export class ShowPostComponent implements OnInit{
   }
   
   
-  onSubmit($event: any) {
+  onSubmit($event: any , id: any) {
     console.log($event)
     this.messageTobeCommented= $event;
-    // this.user.addComment($event);
+     this.user.addComment(this.messageTobeCommented , id , this.currentUserDetails.displayName);
   }
   addComment(id : any) {
-    this.user.addComment(this.messageTobeCommented , id , this.currentUserDetails.displayName);
   }
 }
+function ViewChild(arg0: string): (target: ShowPostComponent, propertyKey: "videoplayer") => void {
+  throw new Error('Function not implemented.');
+}
+

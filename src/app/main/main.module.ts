@@ -11,6 +11,11 @@ import { ShowPostComponent } from './show-post/show-post.component';
 import { CommentComponent } from './comment/comment.component';
 import { CommentBoxComponent } from './comment-box/comment-box.component';
 import { FormsModule } from '@angular/forms';
+import { ChildCommentComponent } from './child-comment/child-comment.component';
+import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
+import { VgControlsModule } from '@videogular/ngx-videogular/controls';
+import { VgCoreModule } from '@videogular/ngx-videogular/core';
+import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 
 
 const route : Routes = [
@@ -44,6 +49,7 @@ const route : Routes = [
     ShowPostComponent,
     CommentComponent,
     CommentBoxComponent,
+    ChildCommentComponent,
   ],
   imports: [
     CommonModule,
@@ -51,6 +57,10 @@ const route : Routes = [
     RouterModule.forChild(route),
     MatIconModule,
     FormsModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule
   ],
   exports : [RouterModule]
 })

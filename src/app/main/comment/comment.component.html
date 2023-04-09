@@ -1,12 +1,11 @@
 <div class="replies">
 	<div class="main">
 		<div class="left">
-			<div>  {{ comment.value }} {{comment.text}}</div>
 		</div>
 		<div class="right">
 			<div class="detail">
-				<span class="user">{{comment.text}}</span>
-				<span class="date">{{comment.text}}</span>
+				<span class="user">{{comment.username}}</span>
+				<span class="date">{{comment.date }}</span>
 			</div>
 			<div class="comment">
 				<p>{{comment.text}}</p>
@@ -16,5 +15,6 @@
 		</div>
 	</div>
 	<br/>
-	<!-- <app-comment *ngFor="let c of comment " [comment]="c"></app-comment> -->
+	<app-comment *ngFor="let c of comment.childComments" [comment]="c"></app-comment>
 </div>
+	
