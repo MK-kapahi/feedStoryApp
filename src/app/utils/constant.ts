@@ -13,5 +13,22 @@ export const REGEX = {
 {
   Api :{
     user : 'User.json'
+  },
+  Path : {
+    AUTH :'auth',
+    MAIN :'main',
+    HOME :'home',
+    SHAREPOST :'show-Post',
+    CREATEPOST :'create-Post',
+    PROFILE : 'profile',
+    LOGIN : 'login',
+    SIGNUP : 'sign-in',
+    FORGOT : 'forgot'
+  },
+
+  Upload :
+  {
+    IMAGE :1,
+    VEDIO :2
   }
 }

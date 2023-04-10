@@ -154,7 +154,7 @@ export class InstaUserService {
         titleClass: "center",
         messageClass: "center",
        })
-       this.route.navigate(['main/home'])
+       this.route.navigate(['ConstantData.Path.MAIN'])
     })
 
   }
@@ -295,7 +295,7 @@ export class InstaUserService {
     let LikeData : LikesModal =
     {
       postId: postid,
-      likedUserId :  [arrayUnion(userID)]
+      likedUserId :  [userID]
     }
     this.afs.collection("Likes").doc(new Date().getTime().toString()).set(LikeData).then(()=>{
       console.log("done")
@@ -307,8 +307,22 @@ export class InstaUserService {
 
   getLikesData()
   {
-   
     return this.afs.collection('Likes').valueChanges();
   }
+
+  updateData(postid: any , userId : string)
+  {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+         `Likes/${postid}`
+     );
+     this.afs.collection("postDetail").doc(postid).update({
+      "likes" : increment(1)
+     })
+       return userRef.update({
+          likedUserId : arrayUnion(userId)
+       })
+
+  }
+
   }
 

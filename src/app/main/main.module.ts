@@ -17,25 +17,26 @@ import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgCoreModule } from '@videogular/ngx-videogular/core';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { ConstantData } from '../utils/constant';
 
 
 const route : Routes = [
   {
-    path:"",redirectTo:"home",pathMatch:'full'
+    path:"",redirectTo:ConstantData.Path.HOME,pathMatch:'full'
   },
   {
-    path : 'home' , component: HomeComponent , children:[
+    path : ConstantData.Path.HOME , component: HomeComponent , children:[
       {
         path:"",redirectTo:"show-Post" ,pathMatch:'full'
       },
       {
-        path : 'show-Post' , component : ShowPostComponent , 
+        path : ConstantData.Path.SHAREPOST , component : ShowPostComponent , 
       },
       {
-        path : 'create-Post' , component : CreatePostComponent ,
+        path : ConstantData.Path.CREATEPOST , component : CreatePostComponent ,
       },
       {
-        path : 'profile' , component : ProfileComponent ,
+        path : ConstantData.Path.PROFILE , component : ProfileComponent ,
       }
     ]
   },

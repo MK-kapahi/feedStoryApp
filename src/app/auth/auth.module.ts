@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { ConstantData } from '../utils/constant';
 
 
 const route : Routes = [
@@ -14,13 +15,13 @@ const route : Routes = [
     path:"",redirectTo:"login",pathMatch:'full'
   },
   {
-    path : 'sign-in' , component: SignUpComponent 
+    path : ConstantData.Path.SIGNUP , component: SignUpComponent 
   },
   {
-    path : 'login' , component: LoginComponent 
+    path : ConstantData.Path.LOGIN , component: LoginComponent 
   },
   {
-    path : 'forgot' , component: ForgotComponent 
+    path : ConstantData.Path.FORGOT , component: ForgotComponent 
   },
   {
     path : 'verify-email-address' , component : VerifyEmailComponent
