@@ -17,8 +17,10 @@
 
                     <div class="d-flex flex-row justify-content-around temp mt-5 mb-3 ">
                         <label> Add Description </label>
-                        <input type="text" (change)="DiscriptionEntered($event)" placeholder="Type Message ..........">
-                    </div>
+                        <input type="text" (change)="DiscriptionEntered($event)" (focus)="onFocus()" placeholder="Type Message ..........">
+                          <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
+                        </div>
+                        <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
 
 
                     <p class="my-1">

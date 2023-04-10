@@ -16,6 +16,7 @@ import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgCoreModule } from '@videogular/ngx-videogular/core';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 
 const route : Routes = [
@@ -60,7 +61,8 @@ const route : Routes = [
     VgCoreModule,
     VgControlsModule,
     VgOverlayPlayModule,
-    VgBufferingModule
+    VgBufferingModule,
+    PickerModule
   ],
   exports : [RouterModule]
 })

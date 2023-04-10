@@ -34,6 +34,7 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/@videogular/ngx-videogular/fonts/videogular.css",
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
               "src/styles.scss"
             ],
             "scripts": []

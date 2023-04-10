@@ -1,104 +1,43 @@
-<!-- <div class="container">
-<div class="card-list" *ngFor="let post of Posts">
-	<article class="card">
-	<figure class="card-image">
-		<img [src]=post.Url />
-	</figure>
-	<div class="card-header">
-		<a href="#">When life gives you oranges</a>
-		<button class="icon-button">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" display="block" id="Heart">
-				<path d="M7 3C4.239 3 2 5.216 2 7.95c0 2.207.875 7.445 9.488 12.74a.985.985 0 0 0 1.024 0C21.125 15.395 22 10.157 22 7.95 22 5.216 19.761 3 17 3s-5 3-5 3-2.239-3-5-3z" />
-			</svg>
 
-		</button>
-	</div>
-	<div class="card-footer">
-		<div class="card-meta card-meta--views">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" display="block" id="EyeOpen">
-				<path d="M21.257 10.962c.474.62.474 1.457 0 2.076C19.764 14.987 16.182 19 12 19c-4.182 0-7.764-4.013-9.257-5.962a1.692 1.692 0 0 1 0-2.076C4.236 9.013 7.818 5 12 5c4.182 0 7.764 4.013 9.257 5.962z" />
-				<circle cx="12" cy="12" r="3" />
-			</svg>
-			2,465
-		</div>
-		<div class="card-meta card-meta--date">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" display="block" id="Calendar">
-				<rect x="2" y="4" width="20" height="18" rx="4" />
-				<path d="M8 2v4" />
-				<path d="M16 2v4" />
-				<path d="M2 10h20" />
-			</svg>
-		</div>
-		<div class="comments">
-		<app-comment-box (add)="onSubmit($event)" >
-		</app-comment-box>
-		<button (click)="addComment(post.postId)"> ADD</button>
-		<div *ngFor="let c of Comments  " >
-        <app-comment *ngIf="c.postId === post.postId"  [comment]="c"></app-comment>
-	    </div>
-		</div>
-	</div>
-</article>
-</div>
-</div> -->
 <div *ngFor="let post of Posts" >
 <div class="instagram-card">
     <div class="instagram-card-header">
       <img src="https://scontent-mia1-2.cdninstagram.com/t51.2885-19/s150x150/15047989_1818466471762459_8340285537701068800_a.jpg" class="instagram-card-user-image"/>
       <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">followmeto</a>
-      <div class="instagram-card-time">{{post.createdAt}}</div>
+      <div class="instagram-card-time">{{post.createdAt.toDate() | date}}</div>
     </div>
     <div class="intagram-card-image">
-      <img [src]=post.Url  height="600px"/>
+		<img [src]=post.Url  height="600px" *ngIf="post.Type===1" />
+		<video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;">
+			<source [src]="post.Url"  type="video/mp4" >
+		</video>
     </div>
-	<div class="intagram-card-image" *ngIf="post.Type===2">
-		<vg-player>
-			<vg-overlay-play></vg-overlay-play>
-	   <vg-buffering></vg-buffering>
-	 
-	   <vg-controls>
-		   <vg-play-pause></vg-play-pause>
-		   <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
-	 
-		   <vg-scrub-bar>
-			  <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-			  <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-		   </vg-scrub-bar>
-	 
-		   <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
-	 
-		   <vg-track-selector></vg-track-selector>
-		   <vg-mute></vg-mute>
-		   <vg-volume></vg-volume>
-	 
-		   <vg-fullscreen></vg-fullscreen>
-	   </vg-controls>
-			<video [vgMedia]="$any(media)" #media id="singleVideo" preload="auto" crossorigin>
-				<source src="{{post.Url}}" type="video/mp4">
-			</video>
-		</vg-player>
-	</div>
   
     <div class="instagram-card-content">
-      <p class="likes">18.068 Me gusta</p>
-      <p><a class="instagram-card-content-user" href="https://www.instagram.com/followmeto/">followmeto</a> So excited to have made it to Lapland! Our first stop was sleeping inside a room made entirely of ice at the Kemi Snow Hotel 😱 Stoked that I've ticked this off my bucket list and never have to do it again... Let's just say the novelty of sleeping in -5 degrees temperature quickly wears off (but hey, it was a COOL experience nonetheless) 😜❄️ <a class="hashtag" href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a></p>
+		<button mat-fab  aria-label="Example icon button with a heart icon" class="btn" (click)="LikePost(post.postId)"  [ngStyle]="isLiked ? {'color': 'red'} : {'color': 'grey'}">
+			<mat-icon>favorite</mat-icon>
+		</button>
+		<!-- <button class="btn" mat-icon-button color="red" aria-label="Example icon button with a heart icon" >
+			<mat-icon>favorite</mat-icon>
+		</button> -->
+      <p class="likes">{{post.likes}}</p>
+      <p><a class="instagram-card-content-user" href="https://www.instagram.com/followmeto/">followmeto</a>{{post.Description}}😜❄️ <a class="hashtag" href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a></p>
       <p class="comments">ver los 48 comentarios</p>
-      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">sanguine.j@loaf_made</a> wowwwwww
+      <!-- <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">sanguine.j@loaf_made</a> wowwwwww
       <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">spainstakeoverWow</a> 😍
-      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">edieandottotravelsSo</a> cool ❄️
+      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">edieandottotravelsSo</a> cool ❄️ -->
     <hr>
     </div>
-    
-    <div class="instagram-card-footer">
-      <a class="footer-action-icons" href="#"><i class="fa fa-heart-o"></i></a>
-      <input class="comments-input" type="text" placeholder="Añade un comentario..."/>
-      <a class="footer-action-icons" href="#"><i class="fa fa-ellipsis-h"></i></a>
+	<button (click)="showComment =! showComment" class="btn"><mat-icon> add_comment</mat-icon></button>
+    <div *ngIf="showComment">
+    <div class="instagram-card-footer" >
+	  <app-comment-box (add)="commentAdded($event)" [postId]="post.postId">
+	</app-comment-box>
     </div>
-	<app-comment-box (add)="onSubmit($event , post.postId)" [postId]="post.postId">
-  </app-comment-box>
-  <div *ngFor="let c of Comments  " >
+  <div *ngFor="let c of Comments " >
 	  <app-comment *ngIf="c.postId === post.postId"  [comment]="c"></app-comment>
-	  </div>
+</div>
+</div>
 
   </div>
 </div>	

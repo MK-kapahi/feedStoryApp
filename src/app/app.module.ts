@@ -21,6 +21,7 @@ import {VgCoreModule} from '@videogular/ngx-videogular/core';
 import {VgControlsModule} from '@videogular/ngx-videogular/controls';
 import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
 import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
     VgCoreModule,
     VgControlsModule,
     VgOverlayPlayModule,
-    VgBufferingModule
+    VgBufferingModule,
+    PickerModule
   ],
   providers: [FireBaseService],
   bootstrap: [AppComponent],

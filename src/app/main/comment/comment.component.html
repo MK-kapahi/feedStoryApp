@@ -1,20 +1,52 @@
-<div class="replies">
-	<div class="main">
-		<div class="left">
-		</div>
-		<div class="right">
-			<div class="detail">
-				<span class="user">{{comment.username}}</span>
-				<span class="date">{{comment.date }}</span>
+
+<div class="container">
+	<div class="be-comment-block">
+		<!-- <h1 class="comments-title">Comments (3)</h1> -->
+		<div class="be-comment">
+			<div class="be-img-comment">	
+				<a href="blog-detail-2.html">
+					<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="be-ava-comment">
+				</a>
 			</div>
-			<div class="comment">
-				<p>{{comment.text}}</p>
+			<div class="be-comment-content">
+					<span class="be-comment-name">
+						<a href="blog-detail-2.html">{{comment.username}}</a>
+						</span>
+					<span class="be-comment-time">
+						<i class="fa fa-clock-o"></i>
+						{{comment.date.toDate() | date  }}
+					</span>
+	
+				<p class="be-comment-text">
+					{{comment.text}}
+				</p>
+				<button (click)="replyClick(comment.commentId)" title="Reply" class="btn" > <mat-icon>reply</mat-icon></button>
+				<app-comment-box (add)="onAdd($event)" *ngIf="isEditing"></app-comment-box>
 			</div>
-			<a (click)="replyClick()">reply</a>
-			<app-comment-box (add)="onAdd($event)" *ngIf="isEditing"></app-comment-box>
+			<div class="replies">
+				<app-comment *ngFor="let c of comment.replies" [comment]="c"></app-comment>
+			</div>
 		</div>
 	</div>
-	<br/>
-	<app-comment *ngFor="let c of comment.childComments" [comment]="c"></app-comment>
-</div>
+</div>	
+
 	
+<!-- <div class="replies">
+					<div class="main">
+						<div class="left">
+						</div>
+						<div class="right">
+							<div class="detail">
+								<span class="user">{{comment.username}}</span>
+								<span class="date">{{comment.date }}</span>
+							</div>
+							<div class="comment">
+								<p>{{comment.text}}</p>
+							</div>
+							<a (click)="replyClick(comment.commentId)">reply</a>
+							<app-comment-box (add)="onAdd($event)" *ngIf="isEditing"></app-comment-box>
+						</div>
+					</div>
+					<br />
+					<app-comment *ngFor="let c of comment.childComments" [comment]="c"></app-comment>
+				</div> -->

@@ -29,6 +29,7 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-   "compilerOptions": { "skipLibCheck": true, } ,
+   "compilerOptions": { "skipLibCheck": true, 
+   "types": ["uuid"] } ,
   }
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
-import { getDocs, collection, doc, getDoc, query, where, arrayUnion, FieldValue, setDoc, orderBy } from 'firebase/firestore';
+import { getDocs, collection, doc, getDoc, query, where, arrayUnion, FieldValue, setDoc, orderBy, increment } from 'firebase/firestore';
 import { db } from 'src/environment';
-import { Comment, Post, PostModal, User } from '../utils/modal';
+import { Comment, LikesModal, Post, PostModal, User } from '../utils/modal';
 import { AngularFireStorage  } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
 import { Subject } from 'rxjs';
@@ -98,12 +98,12 @@ export class InstaUserService {
     });
   }
 
-  uploadVideo(file: File) {
-    const vedioPath = `vedios/${Date.now()}_${File.name}`;
+  uploadVideo(file: any) {
+    const vedioPath = `videos/${Date.now()}_${file.name}`;
     const storageRef = this.store.ref(vedioPath);
    // const videoRef = storageRef.child(`videos/${file.name}`);
    // const task = videoRef.put(file);
-   const task = this.store.upload(vedioPath,File)
+   const task = this.store.upload(vedioPath,file)
    return new Promise((resolve, reject) => {
     task
       .snapshotChanges()
@@ -220,7 +220,7 @@ export class InstaUserService {
   }
 
 
-   addComment(message: string , id : any , name : string)
+   addComment(message: string , id : any , name : string, replyid?: any)
    {
 
        let comment :Comment ={
@@ -228,9 +228,7 @@ export class InstaUserService {
          date: new Date(),
          text: message,
          postId: id,
-         commentId: new Date().getTime().toString(),
-         parentCommentId: null,
-         childComments : []
+         commentId: new Date().getTime().toString()
        }
        let commentRef :AngularFirestoreDocument<any> = this.afs.doc(`comments/${new Date().getTime().toString()}`)
 
@@ -247,6 +245,7 @@ export class InstaUserService {
     .catch((error: any) => {
       console.error("Error writing document: ", error);
     });
+    this.getComments()
    }
 
    async getComments()
@@ -260,16 +259,56 @@ export class InstaUserService {
     this.CommentsSubject.next(data);
   }
 
-    // addNestedComments(name : string , message : string , id : string , )
-    // {
+  addNestedComments(message: string , id : any , name : string , commentId : any)
+  {
+
+      let comment :Comment ={
+        username: name,
+        date: new Date(),
+        text: message,
+        postId: id,
+        commentId: new Date().getTime().toString(),
+      }
+      let commentRef :AngularFirestoreDocument<any> = this.afs.doc(`comments/${commentId}`)
+
+      return commentRef.update({
+        childComments : arrayUnion(comment)
+         })
+     //  return commentRef.set(comment, {
+     //   merge: true,
+     // }).then((response)=>{
+     //   console.log(response);
+     // })
+
+  //   this.afs.collection("comments").doc(new Date().getTime().toString()).set(comment).then(() => {
      
-    //    const nestedComment : Comment ={
+  //    console.log("Data successfully written!");
+  //  })  
+  //  .catch((error: any) => {
+  //    console.error("Error writing document: ", error);
+  //  });
+  }
 
-    //   } 
+  updateCountOfPost(postid :any ,userID: unknown)
+  {
+
+    let LikeData : LikesModal =
+    {
+      postId: postid,
+      likedUserId :  [arrayUnion(userID)]
+    }
+    this.afs.collection("Likes").doc(new Date().getTime().toString()).set(LikeData).then(()=>{
+      console.log("done")
+    })
+     this.afs.collection("postDetail").doc(postid).update({
+      "likes" : increment(1)
+     })
+  }
+
+  getLikesData()
+  {
    
-    //   this.
-    // }
-
-
+    return this.afs.collection('Likes').valueChanges();
+  }
   }
 

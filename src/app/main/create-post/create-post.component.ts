@@ -16,7 +16,9 @@ export class CreatePostComponent {
   User : any =[] 
   URL : any ;
   Posts : any =[]
-  Type : number = 1
+  Type : number = 1;
+  isEmojiPickerVisible: boolean = false;
+  message!: string;
   constructor(public user : InstaUserService ){
     this.user.getDetails();
     this.user.userDetails.subscribe((response : DocumentData)=>{
@@ -65,8 +67,19 @@ export class CreatePostComponent {
           console.log(res);
           this.URL = res;
         })
-        this.Type = 1;
         }
+    }   
+
+    addEmoji(event: any) {
+    const { discriptionMessage } = this;
+    console.log(`${event.emoji.native}`)
+    const text = `${discriptionMessage}${event.emoji.native}`;
+
+    this.discriptionMessage = text;
+    console.log(this.discriptionMessage)
     }
        
+    onFocus() {
+      this.isEmojiPickerVisible = false;
+    }
 }

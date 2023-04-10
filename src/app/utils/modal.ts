@@ -9,7 +9,7 @@ export interface User {
 
  export interface Post {
     postId : string;
-    Url: string;
+    Url: any;
     Type : number ;
     createdAt : Date ;
     Archieve : boolean ;
@@ -28,10 +28,27 @@ export interface User {
 
  export interface Comment {
    commentId: string;
-   parentCommentId:null| string;
-   childComments?: Comment[];
    username: string;
    date: Date;
    text: string;
    postId : any;
+   parentId ?: string | null;
+   replies ?:Comment[];
+ }
+
+ export interface LikesModal
+ {
+   postId : any;
+   likedUserId :Array<any>
+ }
+
+
+ export interface Reply {
+   commentId: string;
+   text: string;
+   username: string;
+   comments?: Comment[],
+   date: Date;
+   postId : any;
+   replies?: Comment[];
  }
