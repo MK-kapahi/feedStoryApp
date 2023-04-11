@@ -26,12 +26,12 @@
       <div>
       </div>
     </div>
+    <div class="instagram-card-footer">
+      <app-comment-box (add)="onSubmit($event ,post.postId)">
+      </app-comment-box>
+    </div>
     <button (click)="showComment =! showComment" class="btn"><mat-icon> add_comment</mat-icon></button>
     <div *ngIf="showComment">
-      <div class="instagram-card-footer">
-        <app-comment-box (add)="onSubmit($event ,post.postId)">
-        </app-comment-box>
-      </div>
       <div *ngFor="let c of Comments ">
         <app-comment *ngIf="c.postId === post.postId" [comment]="c" [Postid]="post.postId"
           [Name]="currentUserDetails.displayName"></app-comment>

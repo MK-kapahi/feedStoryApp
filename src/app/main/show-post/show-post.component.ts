@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, } from '@angular/fire/compat/firestore';
 import { DocumentData } from 'firebase/firestore';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CommentReplyService } from 'src/app/service/comment-reply.service';
 import { InstaUserService } from 'src/app/service/insta-user.service';
+import { CommentComponent } from '../comment/comment.component';
 
 @Component({
   selector: 'app-show-post',
@@ -17,7 +19,7 @@ export class ShowPostComponent implements OnInit {
   showComment: boolean = false;
   LikedUserList :Array<string> =[]
 
-  constructor(private user: InstaUserService, private commentsService: CommentReplyService, private afs: AngularFirestore) {
+  constructor(private user: InstaUserService, private commentsService: CommentReplyService, private afs: AngularFirestore ,private modalService: MdbModalService) {
     this.user.getDetails();
     this.user.userDetails.subscribe((response: DocumentData) => {
       this.currentUserDetails = response;
@@ -73,6 +75,10 @@ export class ShowPostComponent implements OnInit {
                 this.user.updateData(postId, this.currentUserDetails.uid)
                 return;
               }
+                this.user.getDocumentFromCollection(user).subscribe((document :any) => {
+                  this.LikedUserList.push(document.data().displayName)
+                  console.log(this.LikedUserList)
+                });
             }
           }
         }
@@ -90,14 +96,14 @@ export class ShowPostComponent implements OnInit {
   }
 
   ShowListofUsers(postId: any) {
-    this.user.getLikesData(postId).subscribe((response: any) => {
-      console.log(response)
-      for (let user of response.likedUserId) {
-        this.user.getDocumentFromCollection(user).subscribe((document :any) => {
-          this.LikedUserList.push(document.data().displayName)
-          console.log(this.LikedUserList)
-        });
-      }
-    })
+    // this.user.getLikesData(postId).subscribe((response: any) => {
+    //   console.log(response)
+    //   for (let user of response.likedUserId) {
+    //     this.user.getDocumentFromCollection(user).subscribe((document :any) => {
+    //       this.LikedUserList.push(document.data().displayName)
+    //       console.log(this.LikedUserList)
+    //     });
+    //   }
+    // })
   }
 }

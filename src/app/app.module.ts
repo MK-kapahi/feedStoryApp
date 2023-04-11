@@ -22,6 +22,7 @@ import {VgControlsModule} from '@videogular/ngx-videogular/controls';
 import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
 import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 
 
 @NgModule({
@@ -50,9 +51,9 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     VgControlsModule,
     VgOverlayPlayModule,
     VgBufferingModule,
-    PickerModule
+    PickerModule,
   ],
-  providers: [FireBaseService],
+  providers: [FireBaseService ,MdbModalService],
   bootstrap: [AppComponent],
   schemas :[CUSTOM_ELEMENTS_SCHEMA]
 })

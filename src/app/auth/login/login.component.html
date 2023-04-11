@@ -1,39 +1,80 @@
-<div class="overlay">
-  <form [formGroup]="loginForm" (ngSubmit)="login()">
-    <div class="con">
-      <header class="head-form">
-        <h2>Log In</h2>
-        <p>login here using your username and password</p>
-      </header>
-      <br />
-      <div class="field-set">
-        <span class="input-item">
-          <i class="fa fa-user-circle"></i>
-        </span>
-        <input class="form-input" id="txt-input" type="text" placeholder="@UserName" formControlName="email" />
-        <p *ngIf=" loginForm.controls['email'].touched &&  loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('pattern') "
-        style="color: red"> PLease Enter a valid E-mail</p>
-        <br />
-        <span class="input-item">
-          <i class="fa fa-key"></i>
-        </span>
-        <input  matInput [type]="showPassword ? 'password' : 'text'" class="form-input" placeholder="Password" id="pwd" name="password" formControlName="password" />
-        <mat-icon matSuffix (click)="togglePasswordVisibility()">{{showPassword?'visibility_off':'visibility'}}</mat-icon>
-        <p style=" color: red;" *ngIf="loginForm.controls['password'].touched &&  loginForm.controls['password'].hasError('required') || loginForm.controls['password'].hasError('pattern') ">
-            Password must contain more than 8 characters, 1 upper case letter, and
-            1 special character
-        </p>
-
-        <br />
-        <button type="submit" class="log-in">Log In</button>
-      </div>
-      <div class="other">
-        <button class="btn submits frgt-pass" (click)="moveToForgotPassword()">Forgot Password</button>
-      </div>
-      <button type="button" class="btn submits sign-up" (click)="signIn()">
-        Sign Up
-        <i class="fa fa-user-plus" aria-hidden="true"></i>
-      </button>
+<div id="wrapper">
+  <div class="main-content">
+    <div class="header">
+      <img src="https://i.imgur.com/zqpwkLQ.png" />
     </div>
-  </form>
-</div>
+    <div class="l-part">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="con">
+          <div class="field-set">
+            <input
+              class="input-2"
+              id="txt-input"
+              type="text"
+              placeholder="@UserName"
+              formControlName="email"
+            />
+            <p
+              *ngIf="
+                (loginForm.controls['email'].touched &&
+                  loginForm.controls['email'].hasError('required')) ||
+                loginForm.controls['email'].hasError('pattern')
+              "
+              style="color: red"
+            >
+              PLease Enter a valid E-mail
+            </p>
+            <br />
+            <span class="input-item">
+              <i class="fa fa-key"></i>
+            </span>
+            <div>
+              <input
+                matInput
+                [type]="showPassword ? 'password' : 'text'"
+                class="input-1"
+                placeholder="Password"
+                id="pwd"
+                name="password"
+                formControlName="password"
+              />
+              <mat-icon matSuffix (click)="togglePasswordVisibility()">{{
+                showPassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+              <p
+                style="color: red"
+                *ngIf="
+                  (loginForm.controls['password'].touched &&
+                    loginForm.controls['password'].hasError('required')) ||
+                  loginForm.controls['password'].hasError('pattern')
+                "
+              >
+                Password must contain more than 8 characters, 1 upper case
+                letter, and 1 special character
+              </p>
+              <button
+                class="btn submits frgt-pass"
+                (click)="moveToForgotPassword()"
+              >
+                Forgot ?
+              </button>
+            </div>
+            <br />
+            <button type="submit" class="log-in">Log In</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    </div>
+    <div class="sub-content">
+      <div class="s-part">
+        Don't have an account?<button
+          type="button"
+          class="btn submits sign-up"
+          (click)="signIn()"
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </div>

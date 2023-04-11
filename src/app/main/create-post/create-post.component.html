@@ -7,7 +7,13 @@
                     <div class="d-flex ">
                         <h2 class="flex-grow-1 justify-self-center">Create Post </h2>
                     </div>
+                    <div *ngIf="URL  then ifpart ; else elsepart">
 
+                    </div>
+                    <ng-template #ifpart >
+                        <img [src]=URL alt="" srcset="" style="width: 300px; height: 300px;">
+                    </ng-template>
+                    <ng-template #elsepart ></ng-template>
                     <div class="d-flex flex-row temp mt-5 mb-3 justify-content-around">
                         <label> Choose Image </label>
                         <button class="btn" (click)="post.click()"> <mat-icon>add_a_photo</mat-icon></button>
