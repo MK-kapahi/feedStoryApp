@@ -5,6 +5,8 @@
   </div> -->
 
   <form (ngSubmit)="onSubmit()">
-    <textarea [(ngModel)]="commentText" name="comment" placeholder="Write a comment..."></textarea>
+    <textarea [(ngModel)]="commentText" name="comment" placeholder="Write a comment..." (focus)="onFocus()"></textarea>
+    <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
+    <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
     <button type="submit">Submit</button>
   </form>

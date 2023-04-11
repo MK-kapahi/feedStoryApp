@@ -1,43 +1,41 @@
-
-<div *ngFor="let post of Posts" >
-<div class="instagram-card">
-    <div class="instagram-card-header">
-      <img src="https://scontent-mia1-2.cdninstagram.com/t51.2885-19/s150x150/15047989_1818466471762459_8340285537701068800_a.jpg" class="instagram-card-user-image"/>
-      <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">followmeto</a>
+<div *ngFor="let post of Posts">
+  <div class="instagram-card">
+    <div class="instagram-card-header d-flex justify-content-between">
+      <img src="{{post.photoUrlOfUser}}"  alt="no image" srcset="" class="instagram-card-user-image" >
+      <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">{{post.username}}</a>
       <div class="instagram-card-time">{{post.createdAt.toDate() | date}}</div>
     </div>
     <div class="intagram-card-image">
-		<img [src]=post.Url  height="600px" *ngIf="post.Type===1" />
-		<video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;">
-			<source [src]="post.Url"  type="video/mp4" >
-		</video>
+      <img [src]=post.Url height="600px" *ngIf="post.Type===1" />
+      <video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;">
+        <source [src]="post.Url" type="video/mp4">
+      </video>
     </div>
-  
-    <div class="instagram-card-content">
-		<button mat-fab  aria-label="Example icon button with a heart icon" class="btn" (click)="LikePost(post.postId)"  [ngStyle]="isLiked ? {'color': 'red'} : {'color': 'grey'}">
-			<mat-icon>favorite</mat-icon>
-		</button>
-		<!-- <button class="btn" mat-icon-button color="red" aria-label="Example icon button with a heart icon" >
-			<mat-icon>favorite</mat-icon>
-		</button> -->
-      <p class="likes">{{post.likes}}</p>
-      <p><a class="instagram-card-content-user" href="https://www.instagram.com/followmeto/">followmeto</a>{{post.Description}}😜❄️ <a class="hashtag" href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a></p>
-      <p class="comments">ver los 48 comentarios</p>
-      <!-- <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">sanguine.j@loaf_made</a> wowwwwww
-      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">spainstakeoverWow</a> 😍
-      <br><a class="user-comment" href="https://www.instagram.com/anitzakm/">edieandottotravelsSo</a> cool ❄️ -->
-    <hr>
-    </div>
-	<button (click)="showComment =! showComment" class="btn"><mat-icon> add_comment</mat-icon></button>
-    <div *ngIf="showComment">
-    <div class="instagram-card-footer" >
-	  <app-comment-box (add)="commentAdded($event)" [postId]="post.postId">
-	</app-comment-box>
-    </div>
-  <div *ngFor="let c of Comments " >
-	  <app-comment *ngIf="c.postId === post.postId"  [comment]="c"></app-comment>
-</div>
-</div>
 
+    <div class="instagram-card-content">
+      <button (click)="LikePost(post.postId)">
+        LIKE
+      </button>
+      <p class="likes">{{post.likes}}</p>
+      <p><a class="instagram-card-content-user"
+        href="https://www.instagram.com/followmeto/">followmeto</a>{{post.Description}}😜❄️ <a class="hashtag"
+        href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a></p>
+        <button class="btn" (click)="ShowListofUsers(post.postId)">LikedBy</button>
+        <p class="comments">ver los 48 comentarios</p>
+      <hr>
+      <div>
+      </div>
+    </div>
+    <button (click)="showComment =! showComment" class="btn"><mat-icon> add_comment</mat-icon></button>
+    <div *ngIf="showComment">
+      <div class="instagram-card-footer">
+        <app-comment-box (add)="onSubmit($event ,post.postId)">
+        </app-comment-box>
+      </div>
+      <div *ngFor="let c of Comments ">
+        <app-comment *ngIf="c.postId === post.postId" [comment]="c" [Postid]="post.postId"
+          [Name]="currentUserDetails.displayName"></app-comment>
+      </div>
+    </div>
   </div>
-</div>	
+</div>

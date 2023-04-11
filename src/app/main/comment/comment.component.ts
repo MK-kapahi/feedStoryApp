@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { CommentReplyService } from 'src/app/service/comment-reply.service';
 import { InstaUserService } from 'src/app/service/insta-user.service';
 
 @Component({
@@ -7,33 +9,56 @@ import { InstaUserService } from 'src/app/service/insta-user.service';
   styleUrls: ['./comment.component.scss']
 })
 export class CommentComponent {
+  replyText: any;
   @Input()
   comment: any;
+  @Input() Postid: any;
+  @Input() Name: string = '';
   isEditing = false;
-  constructor(private user : InstaUserService) {}
+  repliesShow: boolean = false;
+  NestedReply: any = []
+  isEmojiPickerVisible : boolean = false;
+  constructor(private user: InstaUserService, private commentService: CommentReplyService, private afs: AngularFireDatabase) {
+  }
 
-  id :any 
+  id: any
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  replyClick(commentId :any) {
+  replyClick(commentId: any) {
     this.isEditing = !this.isEditing;
     this.id = commentId;
     console.log(commentId)
   }
 
-  onAdd(event: any) {
-    const value = event; 
-    console.log(value);
-    //console.log(!this.comment.childComments)
-    if(!this.comment.childComments) {
-  console.log("fgfffffffffff")
-} 
+  addReply() {
+    this.commentService.addReplyToComment(this.id, this.replyText, this.Name);
+  }
+  showReply(id: any) {
+    this.repliesShow = true;
+    console.log(id)
+    this.commentService.getNestedReply(id).subscribe((response: any) => {
+      console.log(response)
+      console.log(response.replies)
+      for (let reply of response.replies) {
+        this.commentService.getNestedReply(reply.commentId).subscribe((nestedReply: any) => {
+          this.NestedReply.push(nestedReply);
+        })
+      }
+    })
 
-this.user.addNestedComments(value,"43454","muskan",this.id);
-    // this.comment.childComments.unshift(value);
-     this.isEditing = false;
   }
 
-  
+  addEmoji(event: any) {
+    const { replyText } = this;
+    console.log(`${event.emoji.native}`)
+    const text = `${replyText}${event.emoji.native}`;
+
+    this.replyText = text;
+    console.log(this.replyText);
+    }
+
+    onFocus() {
+      this.isEmojiPickerVisible = false;
+    }
 }

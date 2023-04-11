@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFirestore, } from '@angular/fire/compat/firestore';
 import { DocumentData } from 'firebase/firestore';
+import { CommentReplyService } from 'src/app/service/comment-reply.service';
 import { InstaUserService } from 'src/app/service/insta-user.service';
-import { Comment } from 'src/app/utils/modal';
 
 @Component({
   selector: 'app-show-post',
@@ -14,26 +15,25 @@ export class ShowPostComponent implements OnInit {
 
   currentUserDetails: any = [];
   showComment: boolean = false;
+  LikedUserList :Array<string> =[]
 
-  constructor(private user: InstaUserService, private client: HttpClient) {}
-
-  clickCount: number = 0;
-  messageTobeCommented: string = '';
-  Posts: any = [];
-  Comments: any = [];
-  ngOnInit(): void {
+  constructor(private user: InstaUserService, private commentsService: CommentReplyService, private afs: AngularFirestore) {
     this.user.getDetails();
     this.user.userDetails.subscribe((response: DocumentData) => {
       this.currentUserDetails = response;
     });
-
     this.user.AllPosts();
     this.user.AllPostSubject.subscribe((response) => {
-      //console.log("Allll Post ",response)
-      this.Posts.push(response);
+      this.Posts = response;
     });
+  }
+
+  messageTobeCommented: string = '';
+  Posts: any = [];
+  Comments: any = [];
+  ngOnInit(): void {
+
     this.user.PostOFAuser.subscribe((userResponse) => {
-      //console.log("sadsfsdfsf",userResponse)
     });
     this.user.getComments();
     this.user.CommentsSubject.subscribe((response) => {
@@ -42,53 +42,62 @@ export class ShowPostComponent implements OnInit {
     });
   }
 
-  commentAdded(comment: Comment) {
-    comment.replies = [];
-    this.Comments.push(comment);
-  }
-
   onSubmit($event: any, id: any) {
     console.log($event);
     this.messageTobeCommented = $event;
-    this.user.addComment(
+    this.commentsService.addComment(
       this.messageTobeCommented,
       id,
       this.currentUserDetails.displayName
     );
+
+    console.log("Done")
+    this.user.getComments();
+    this.user.CommentsSubject.subscribe((response) => {
+      this.Comments = response;
+      console.log(this.Comments);
+    });
   }
-  addComment(id: any) {}
   LikePost(postId: any) {
-    this.user.getLikesData().subscribe((response: any) => {
-      console.log(response);
 
-      if (response.postID == postId) {
-        if (response.likedUserId.length != 0) {
-          for (let user of response.likedUserId) {
-            if (user != this.currentUserDetails.uid) {
-               this.user.updateData(postId , this.currentUserDetails.uid);
-
+    this.user.getLikesData(postId).subscribe((response: any) => {
+      console.log(response)
+      if (response) {
+        if (response.postId === postId) {
+          if (response.likedUserId.length > 0) {
+            for (let user of response.likedUserId) {
+              if (user == this.currentUserDetails.uid) {
+                console.log("userAlready liked");
+              }
+              else {
+                this.user.updateData(postId, this.currentUserDetails.uid)
+                return;
+              }
             }
           }
         }
+      }
 
-        else{
-          this.user.updateCountOfPost(postId , this.currentUserDetails.uid)
-        }
-        
+      else {
+        this.user.updateCountOfPost(postId, this.currentUserDetails.uid)
       }
     });
-    this.clickCount++;
-    // if(this.clickCount ===1)
-    // {
-    // console.log('heyyyyyy')
-    // this.isLiked=true;
-    // this.user.updateCountOfPost(postId , this.currentUserDetails.uid)
-    // }
 
-    // else
-    // {
-    //   ///this.user.updateCountOfPost(postId)
-    //   this.isLiked=false;
-    // }
+    this.user.AllPosts();
+    this.user.AllPostSubject.subscribe((response) => {
+      this.Posts = response;
+    });
+  }
+
+  ShowListofUsers(postId: any) {
+    this.user.getLikesData(postId).subscribe((response: any) => {
+      console.log(response)
+      for (let user of response.likedUserId) {
+        this.user.getDocumentFromCollection(user).subscribe((document :any) => {
+          this.LikedUserList.push(document.data().displayName)
+          console.log(this.LikedUserList)
+        });
+      }
+    })
   }
 }

@@ -11,7 +11,6 @@ import { ShowPostComponent } from './show-post/show-post.component';
 import { CommentComponent } from './comment/comment.component';
 import { CommentBoxComponent } from './comment-box/comment-box.component';
 import { FormsModule } from '@angular/forms';
-import { ChildCommentComponent } from './child-comment/child-comment.component';
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgCoreModule } from '@videogular/ngx-videogular/core';
@@ -51,7 +50,6 @@ const route : Routes = [
     ShowPostComponent,
     CommentComponent,
     CommentBoxComponent,
-    ChildCommentComponent,
   ],
   imports: [
     CommonModule,

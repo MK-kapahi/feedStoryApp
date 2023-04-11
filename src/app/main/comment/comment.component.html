@@ -1,7 +1,6 @@
 
 <div class="container">
 	<div class="be-comment-block">
-		<!-- <h1 class="comments-title">Comments (3)</h1> -->
 		<div class="be-comment">
 			<div class="be-img-comment">	
 				<a href="blog-detail-2.html">
@@ -21,32 +20,20 @@
 					{{comment.text}}
 				</p>
 				<button (click)="replyClick(comment.commentId)" title="Reply" class="btn" > <mat-icon>reply</mat-icon></button>
-				<app-comment-box (add)="onAdd($event)" *ngIf="isEditing"></app-comment-box>
+				<button class="btn" (click)="showReply(comment.commentId)"> showReplies </button>
+				<!-- <app-comment-box (add)="onAdd($event)" *ngIf="isEditing"></app-comment-box> -->
+				<div *ngIf="isEditing">
+					<form (ngSubmit)="addReply()">
+						<textarea [(ngModel)]="replyText" name="comment" placeholder="Write a reply..." (focus)="onFocus()"></textarea>
+						<button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
+						<emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
+						<button type="submit">Add</button>
+					  </form>
+				</div>
 			</div>
-			<div class="replies">
-				<app-comment *ngFor="let c of comment.replies" [comment]="c"></app-comment>
+			<div class="replies" *ngIf="repliesShow" >
+				<app-comment *ngFor="let c of NestedReply" [comment]="c"  ></app-comment>
 			</div>
 		</div>
 	</div>
 </div>	
-
-	
-<!-- <div class="replies">
-					<div class="main">
-						<div class="left">
-						</div>
-						<div class="right">
-							<div class="detail">
-								<span class="user">{{comment.username}}</span>
-								<span class="date">{{comment.date }}</span>
-							</div>
-							<div class="comment">
-								<p>{{comment.text}}</p>
-							</div>
-							<a (click)="replyClick(comment.commentId)">reply</a>
-							<app-comment-box (add)="onAdd($event)" *ngIf="isEditing"></app-comment-box>
-						</div>
-					</div>
-					<br />
-					<app-comment *ngFor="let c of comment.childComments" [comment]="c"></app-comment>
-				</div> -->

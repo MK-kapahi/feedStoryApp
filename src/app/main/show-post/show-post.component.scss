@@ -15,6 +15,7 @@ body {
 }
 
 img {
+	object-fit:contain;
 	max-width: 100%;
 	display: block;
 }
@@ -32,7 +33,6 @@ img {
 	padding: 1.25rem;
 	position: relative;
 	transition: .15s ease-in;
-	
 	&:hover, &:focus-within {
 		box-shadow: 0 0 0 2px #16C79A, 0 10px 60px 0 rgba(#000, .1);
 			transform: translatey(-5px);
@@ -149,6 +149,7 @@ a{
 	  width: 100%;
 	  max-width: 600px;
 	  margin: auto;
+	  margin-bottom: 40px;
   }
   
   .instagram-card-header{
@@ -165,7 +166,7 @@ a{
   
   .instagram-card-time{
 	  float: right;
-	  width: 80px;
+	  width: 100px;
 	  padding-top:10px;
 	  text-align: right;
 	  color: #999;

@@ -9,22 +9,30 @@ import { v4 as uuid } from 'uuid';
 })
 export class CommentBoxComponent {
   value!: string;
-  @Output() add = new EventEmitter<Comment>();
+  @Output() add = new EventEmitter<string>();
   @Input()
   postId!: string;
 
-  @Output() commentAdded = new EventEmitter<Comment>();
   commentText = '';
+ isEmojiPickerVisible: boolean= false;
   onSubmit(): void {
-    const comment: Comment = {
-      commentId: uuid(),
-      text: this.commentText.trim(),
-      username: 'Anonymous',
-      date: new Date(),
-      postId: "",
-
-    };
-    this.commentAdded.emit(comment);
+    
+    let text= this.commentText.trim();
+    this.add.emit(text);
     this.commentText = '';
+    
   }
+
+  addEmoji(event: any) {
+    const { commentText } = this;
+    console.log(`${event.emoji.native}`)
+    const text = `${commentText}${event.emoji.native}`;
+
+    this.commentText = text;
+    console.log(this.value);
+    }
+
+    onFocus() {
+      this.isEmojiPickerVisible = false;
+    }
 }

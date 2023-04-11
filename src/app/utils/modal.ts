@@ -18,6 +18,8 @@ export interface User {
     likes : number ;
     Comments : string ;
     updateAt : Date;
+    username : string ;
+    photoUrlOfUser :string;
  }
 
  export interface PostModal 
@@ -31,24 +33,13 @@ export interface User {
    username: string;
    date: Date;
    text: string;
-   postId : any;
-   parentId ?: string | null;
-   replies ?:Comment[];
+   postId ?: any;
+   replies ?:Array<any>;
+   replyId ?: string
  }
 
  export interface LikesModal
  {
    postId : any;
    likedUserId :Array<any>
- }
-
-
- export interface Reply {
-   commentId: string;
-   text: string;
-   username: string;
-   comments?: Comment[],
-   date: Date;
-   postId : any;
-   replies?: Comment[];
  }
