@@ -24,23 +24,32 @@ export class ShowPostComponent implements OnInit {
     this.user.userDetails.subscribe((response: DocumentData) => {
       this.currentUserDetails = response;
     });
-    this.user.AllPosts();
-    this.user.AllPostSubject.subscribe((response) => {
-      this.Posts = response;
+    this.user.AllPosts().subscribe((response)=>{
+      this.Posts= response
     });
+    this.user.getPostDetails().subscribe((response:any)=>{
+      for( let post of response)
+      {
+      this.user.getLikesData(post.postId).subscribe((response: any) => {
+      console.log(response)
+      for (let user of response.likedUserId) {
+        this.user.getDocumentFromCollection(user).subscribe((document :any) => {
+          this.LikedUserList.push(document.data().displayName)
+          console.log(this.LikedUserList)
+        });
+      }
+    })
+  }
+  })
   }
 
   messageTobeCommented: string = '';
   Posts: any = [];
   Comments: any = [];
   ngOnInit(): void {
-
-    this.user.PostOFAuser.subscribe((userResponse) => {
-    });
-    this.user.getComments();
-    this.user.CommentsSubject.subscribe((response) => {
-      this.Comments = response;
-      console.log(this.Comments);
+    this.commentsService.getComments().subscribe((response)=>{
+      this.Comments= response;
+      console.log(response)
     });
   }
 
@@ -54,11 +63,6 @@ export class ShowPostComponent implements OnInit {
     );
 
     console.log("Done")
-    this.user.getComments();
-    this.user.CommentsSubject.subscribe((response) => {
-      this.Comments = response;
-      console.log(this.Comments);
-    });
   }
   LikePost(postId: any) {
 
@@ -68,17 +72,18 @@ export class ShowPostComponent implements OnInit {
         if (response.postId === postId) {
           if (response.likedUserId.length > 0) {
             for (let user of response.likedUserId) {
+              this.user.getDocumentFromCollection(user).subscribe((document :any) => {
+                this.LikedUserList.push(document.data().displayName)
+                console.log(this.LikedUserList)
+              });
               if (user == this.currentUserDetails.uid) {
                 console.log("userAlready liked");
+                return ;
               }
               else {
                 this.user.updateData(postId, this.currentUserDetails.uid)
                 return;
               }
-                this.user.getDocumentFromCollection(user).subscribe((document :any) => {
-                  this.LikedUserList.push(document.data().displayName)
-                  console.log(this.LikedUserList)
-                });
             }
           }
         }
@@ -88,22 +93,12 @@ export class ShowPostComponent implements OnInit {
         this.user.updateCountOfPost(postId, this.currentUserDetails.uid)
       }
     });
-
-    this.user.AllPosts();
-    this.user.AllPostSubject.subscribe((response) => {
-      this.Posts = response;
-    });
   }
-
-  ShowListofUsers(postId: any) {
-    // this.user.getLikesData(postId).subscribe((response: any) => {
-    //   console.log(response)
-    //   for (let user of response.likedUserId) {
-    //     this.user.getDocumentFromCollection(user).subscribe((document :any) => {
-    //       this.LikedUserList.push(document.data().displayName)
-    //       console.log(this.LikedUserList)
-    //     });
-    //   }
-    // })
+  ReportPost(id: string)
+  {
+     this.user.blockPost(id).then(()=>{
+      console.log("done");
+     })
+    
   }
 }

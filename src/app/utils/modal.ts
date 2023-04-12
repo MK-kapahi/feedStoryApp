@@ -3,7 +3,6 @@ export interface User {
     email: string;
     displayName: string;
     photoURL?: string;
-    phoneNumber : string ;
     emailVerified: boolean;
  }
 
@@ -12,20 +11,20 @@ export interface User {
     Url: any;
     Type : number ;
     createdAt : Date ;
-    Archieve : boolean ;
+    Block : boolean ;
     Description : string ;
     isLiked : boolean;
     likes : number ;
-    Comments : string ;
+    Comments : number ;
     updateAt : Date;
     username : string ;
-    photoUrlOfUser :string;
+    photoUrlOfUser ?:string;
  }
 
  export interface PostModal 
  {
     uid : string ;
-    postId : string;
+    postId : any;
  }
 
  export interface Comment {

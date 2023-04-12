@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { arrayUnion } from 'firebase/firestore';
+import { arrayUnion, increment } from 'firebase/firestore';
 import { Comment } from '../utils/modal';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,7 +28,9 @@ export class CommentReplyService {
     }
 
      this.afs.collection("comments").doc(documentId).set(commentData).then(() => {
-      
+      this.afs.collection("postDetail").doc(id).update({
+        "Comments" : increment(1)
+      })
       console.log("Data successfully written!");
     })  
     .catch((error: any) => {
@@ -49,13 +51,16 @@ export class CommentReplyService {
     }
   
     this.afs.collection("comments").doc(id).set(replyData).then(() => {
+
+      this.afs.collection("postDetail").doc(id).update({
+        "Comments" : increment(1)
+      })
     
       console.log("Data successfully written!");
     })  
     .catch((error: any) => {
       console.error("Error writing document: ", error);
     });
-      console.log("Data successfully written!");
 
       let commentRef :AngularFirestoreDocument<any> = this.afs.doc(`comments/${commentId}`)
 
@@ -82,5 +87,17 @@ export class CommentReplyService {
   getNestedReply(postid : any)
   {
     return this.afs.collection('comments').doc(postid).valueChanges();
+  }
+
+   getComments() {
+    
+    return this.afs.collection("comments").valueChanges()
+    // let data: any = []
+    // const querySnapshot = await getDocs(collection(db, "comments"));
+    // querySnapshot.forEach((doc) => {
+    //   //console.log( doc.data());
+    //   data.push(doc.data())
+    // });
+    // this.CommentsSubject.next(data);
   }
 }

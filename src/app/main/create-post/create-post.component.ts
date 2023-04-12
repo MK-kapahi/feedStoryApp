@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DocumentData } from 'firebase/firestore';
+import { map, Observable, of } from 'rxjs';
 import { InstaUserService } from 'src/app/service/insta-user.service';
 
 @Component({
@@ -19,25 +20,22 @@ export class CreatePostComponent {
   Type : number = 1;
   isEmojiPickerVisible: boolean = false;
   message!: string;
+  uploadPercent!: Observable<number>;
   constructor(public user : InstaUserService ){
-    this.user.getDetails();
-    this.user.userDetails.subscribe((response : DocumentData)=>{
-      this.User = response
-      console.log(this.User);
-    })
-
-
   }
   ngOnInit(): void {
     this.user.getPost();
     this.user.GetPost.subscribe((response)=>{
-         this.Posts.push(response)
-         console.log(response);
+      this.Posts.push(response)
     })
+    this.user.getDetails();
+    this.user.userDetails.subscribe((response: DocumentData) => {
+      this.User = response;
+      console.log(this.User)
+    });
   }
     PostData()
     {
-  
       this.user.addPost( this.User.uid,this.discriptionMessage,this.URL, this.Type , this.User.displayName , this.User.photoURL).then((response)=>{
         console.log(response)
       })
@@ -60,15 +58,29 @@ export class CreatePostComponent {
           this.URL = res;
           this.Type = 2;
         })
-        }
-        else{
+        this.uploadPercent = this.user.uploadProgressObservable().pipe(map((progress: number) => progress))
+      }
+      else{
         console.log(this.FileUpload)
         this.user.uploadImage(this.FileUpload).then((res:any)=>{
           console.log(res);
           this.URL = res;
         })
-        }
+        this.uploadPercent = this.user.uploadProgressObservable().pipe(map((progress: number) => progress))
+      }
     }   
+
+    getProgress(): Observable<number> {
+      return this.uploadPercent ? this.uploadPercent.pipe(
+        map(progress => {
+          if (progress !== undefined && progress !== null) {
+            return +progress.toFixed(2);
+          } else {
+            return 0;
+          }
+        })
+      ) : of(0);
+    }
 
     addEmoji(event: any) {
     const { discriptionMessage } = this;
@@ -76,7 +88,6 @@ export class CreatePostComponent {
     const text = `${discriptionMessage}${event.emoji.native}`;
 
     this.discriptionMessage = text;
-    console.log(this.discriptionMessage)
     }
        
     onFocus() {

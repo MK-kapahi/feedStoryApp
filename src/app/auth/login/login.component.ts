@@ -30,8 +30,8 @@ export class LoginComponent {
   login() {
     if(this.loginForm.valid)
     {
+      console.log("heyyyy")
         this.fireService.SignIn(this.loginForm.value['email'], this.loginForm.value['password']).then((response:any)=>{
-          console.log(response)
         })
     }
     else

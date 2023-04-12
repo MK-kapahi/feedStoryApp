@@ -1,27 +1,71 @@
-<div>
-<article class="postcard light blue">
-    <a class="postcard__img_link" href="#">
-        <img class="postcard__img" src="" alt="Image Title" />
-    </a>
-    <div class="postcard__text t-dark">     
-        <h1 class="postcard__title blue"><a href="#">Podcast Title</a></h1>
-        <div class="postcard__subtitle small">
-            <time datetime="2020-05-25 12:00:00">
-                <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-            </time>
+<header>
+
+	<div class="container" *ngFor="let detail of User">
+
+		<div class="profile">
+
+			<div class="profile-image">
+
+				<img [src]=detail.photoURL alt="">
+
+			</div>
+
+			<div class="profile-user-settings">
+
+				<h1 class="profile-user-name">janedoe_</h1>
+
+				<button class="btn profile-edit-btn">Edit Profile</button>
+
+				<button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+
+			</div>
+
+			<div class="profile-stats">
+
+				<ul>
+					<li><span class="profile-stat-count">164</span> posts</li>
+					<li><span class="profile-stat-count">188</span> followers</li>
+					<li><span class="profile-stat-count">206</span> following</li>
+				</ul>
+
+			</div>
+
+			<div class="profile-bio">
+
+				<p><span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
+
+			</div>
+
+		</div>
+		<!-- End of profile section -->
+
+	</div>
+	<!-- End of container -->
+
+</header>
+
+<main>
+
+	<div class="container" *ngFor=" let post of CurrentUserPost">
+
+		<div class="gallery">
+
+			<div class="gallery-item" tabindex="0">
+
+				<img [src]=post.Url class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">post</span><i class="fas fa-heart" aria-hidden="true"></i> {{post.likes}}</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>{{post.Comments}}</li>
+					</ul>
+
+				</div>
+
+			</div>
         </div>
-        <div class="postcard__bar"></div>
-        <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-        <ul class="postcard__tagbox">
-            <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-            <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-            <li class="tag__item play blue">
-                <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-            </li>
-        </ul>
-    </div>
-</article>
-</div>
-<div class="Show-user-post">
-    <h3>Posts</h3>
-</div>
+		<div class="loader"></div>
+	</div>
+
+</main>

@@ -4,9 +4,10 @@
     <button (click)="value = ''">cancel</button>
   </div> -->
 
-  <form (ngSubmit)="onSubmit()">
-    <textarea [(ngModel)]="commentText" name="comment" placeholder="Write a comment..." (focus)="onFocus()"></textarea>
-    <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
+  <form (ngSubmit)="onSubmit()" class="d-flex">
+    <textarea [(ngModel)]="commentText" name="comment" placeholder="Write a comment..." (focus)="onFocus()" class="textarea-comment" rows="1"> 
+    </textarea>
+    <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" class="btn">😀</button>
     <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
-    <button type="submit">Submit</button>
+    <button type="submit" class="btn btn-primary" *ngIf="commentText" >post</button>
   </form>

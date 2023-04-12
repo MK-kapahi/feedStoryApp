@@ -23,16 +23,22 @@
 				<button class="btn" (click)="showReply(comment.commentId)"> showReplies </button>
 				<!-- <app-comment-box (add)="onAdd($event)" *ngIf="isEditing"></app-comment-box> -->
 				<div *ngIf="isEditing">
-					<form (ngSubmit)="addReply()">
-						<textarea [(ngModel)]="replyText" name="comment" placeholder="Write a reply..." (focus)="onFocus()"></textarea>
-						<button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
+					<form (ngSubmit)="addReply()" class="d-flex">
+						<textarea [(ngModel)]="replyText" name="comment" placeholder="Write a reply..." class="textarea-comment" (focus)="onFocus()"></textarea>
+						<button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;" class="btn">😀</button>
 						<emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
-						<button type="submit">Add</button>
+						<button type="submit" *ngIf="replyText" class="btn btn-primary" >Add</button>
 					  </form>
 				</div>
 			</div>
 			<div class="replies" *ngIf="repliesShow" >
+				<div *ngIf=" NestedReply.length >0 then ifPart ; else elsePart"> </div>
+				<ng-template #ifPart >
 				<app-comment *ngFor="let c of NestedReply" [comment]="c"  ></app-comment>
+			</ng-template>
+			<ng-template #elsePart >
+				<p> No more replies</p>
+			</ng-template>
 			</div>
 		</div>
 	</div>

@@ -18,9 +18,25 @@
                         <label> Choose Image </label>
                         <button class="btn" (click)="post.click()"> <mat-icon>add_a_photo</mat-icon></button>
                      <input type="file" #post (change)="SelectImage($event)" hidden>
-                     <input type="file" #post (change)="SelectImage($event)" hidden>
                     </div>
-
+                    <div *ngIf="uploadPercent | async as progress ">
+                        <div class="progress">
+                          <div class="progress-bar"
+                               role="progressbar"
+                               [ngClass]="{
+                                 'bg-danger': progress < 25,
+                                 'bg-warning': progress >= 25 && progress < 50,
+                                 'bg-info': progress >= 50 && progress < 75,
+                                 'bg-success': progress >= 75
+                               }"
+                               [style.width.%]="progress"
+                               [attr.aria-valuenow]="progress"
+                               aria-valuemin="0"
+                               aria-valuemax="100">
+                               {{ getProgress() | async }}%
+                          </div>
+                        </div>
+                      </div>
                     <div class="d-flex flex-row justify-content-around temp mt-5 mb-3 ">
                         <label> Add Description </label>
                         <input type="text" (change)="DiscriptionEntered($event)" (focus)="onFocus()" placeholder="Type Message ..........">

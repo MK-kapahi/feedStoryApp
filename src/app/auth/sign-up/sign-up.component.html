@@ -16,10 +16,6 @@
         style="color: red"> PLease Enter a valid E-mail</p>
     </div>
     <div class="form-group">
-        <input type="text" class="form-control item" id="phone-number"   (input)="Replace($event)"  placeholder="Phone Number" formControlName="phoneNumber">
-        <p *ngIf="signUpForm.controls['phoneNumber'].touched &&  signUpForm.controls['phoneNumber'].hasError('required')|| signUpForm.controls['phoneNumber'].hasError('pattern')" style="color: red"> Please Enter a valid Number </p>
-    </div>
-    <div class="form-group">
         <input  matInput [type]="showPassword ? 'password' : 'text'" class="form-control item"  id="password" placeholder="Password" formControlName="password">
         <mat-icon matSuffix (click)="togglePasswordVisibility()">{{showPassword?'visibility_off':'visibility'}}</mat-icon>
         <p style=" color: red;" *ngIf="signUpForm.controls['password'].touched &&  signUpForm.controls['password'].hasError('required') || signUpForm.controls['password'].hasError('pattern') ">

@@ -6,11 +6,11 @@ import { db } from 'src/environment';
 import { Comment, LikesModal, Post, PostModal, User } from '../utils/modal';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
-import { Subject } from 'rxjs';
-import { docJoin } from './joins';
+import { map, of, Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ConstantData } from '../utils/constant';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -22,9 +22,10 @@ export class InstaUserService {
   userDetails = new Subject<DocumentData>
   GetPost = new Subject<DocumentData>
   postType: string = ''
-  AllPostSubject = new Subject<DocumentData>
+
   PostOFAuser = new Subject<DocumentData>
-  CommentsSubject = new Subject
+  CommentsSubject = new Subject;
+  private uploadProgressSubject = new Subject<any>();
   constructor(private route: Router, public afs: AngularFirestore, public Fireauth: AngularFireAuth, private store: AngularFireStorage, private toaster: ToastrService) { }
   SetUserData(user: any, data: any) {
 
@@ -33,7 +34,7 @@ export class InstaUserService {
       email: data.email,
       displayName: data.displayName,
       emailVerified: user.emailVerified,
-      phoneNumber: data.phoneNumber,
+      photoURL: "https://firebasestorage.googleapis.com/v0/b/feedstoryapp-25fc5.appspot.com/o/images%2F1681297580346_images.png?alt=media&token=a082997a-fe7b-4b60-bdec-d241ab848bf7"
     };
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
@@ -51,29 +52,50 @@ export class InstaUserService {
     });
   }
 
-  async AllPosts() {
-    let data: any = []
-    const querySnapshot = await getDocs(query(collection(db, "postDetail"), orderBy("createdAt", "desc")));
-    querySnapshot.forEach((doc) => {
-      data.push(doc.data())
-    });
-    this.AllPostSubject.next(data)
+  AllPosts() {
+    // let data: any = []
+    // const querySnapshot = await getDocs(query(collection(db, "postDetail"), orderBy("createdAt", "desc")));
+    // querySnapshot.forEach((doc) => {
+    //   data.push(doc.data())
+    // });
+    // this.AllPostSubject.next(data)
 
+    let items = this.afs.collection('postDetail', ref => {
+      return ref.orderBy('createdAt', 'desc')
+    }).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(action => ({
+          key: action.payload.doc.id,
+          ...action.payload.doc.data()
+        }));
+      })
+    );
+
+    return items
   }
 
-  async getDetails() {
-    const uid = localStorage.getItem('id')
-    const qureyForCurrentUser = query(collection(db, "users"), where("uid", "==", uid));
-    const querySnapshot = await getDocs(qureyForCurrentUser);
-    querySnapshot.forEach((doc) => {
-      this.userDetails.next(doc.data())
-    });
+   getDetails() {
+    const uid :any= localStorage.getItem('id')
+     this.afs.collection("users").doc(uid).ref.get().then((doc: any) => {
+      if (doc.exists) {
+        //console.log(doc.data())
+        this.userDetails.next(doc.data())
+      }
+    })
+    // const qureyForCurrentUser = query(collection(db, "users"), where("uid", "==", uid));
+    // const querySnapshot = await getDocs(qureyForCurrentUser);
+    // querySnapshot.forEach((doc) => {
+    //   this.userDetails.next(doc.data())
+    // });
   }
   uploadImage(File: any) {
     const filePath = `images/${Date.now()}_${File.name}`;
     const fileRef = this.store.ref(filePath);
     const task = this.store.upload(filePath, File);
-
+    task.percentageChanges()
+      .subscribe((percent) => {
+        this.uploadProgressSubject.next(percent);
+      })
     return new Promise((resolve, reject) => {
       task
         .snapshotChanges()
@@ -96,7 +118,12 @@ export class InstaUserService {
     // const videoRef = storageRef.child(`videos/${file.name}`);
     // const task = videoRef.put(file);
     const task = this.store.upload(vedioPath, file)
+    task.percentageChanges()
+      .subscribe((percent) => {
+        this.uploadProgressSubject.next(percent);
+      })
     return new Promise((resolve, reject) => {
+
       task
         .snapshotChanges()
         .toPromise()
@@ -111,32 +138,37 @@ export class InstaUserService {
         .catch((error) => reject(error));
     });
   }
-  addPost(userId: string, discription: any, url: any, type: number , name : string , photoURL: string) {
 
+  uploadProgressObservable() {
+    return this.uploadProgressSubject.asObservable();
+  }
+  addPost(userId: string, discription: any, url: any, type: number, name: string, photoURL: string) {
+    const id = uuidv4()
     const postdetails: Post =
     {
-      postId: this.postId + new Date(),
+      postId: id,
       Url: url,
       Type: type,
       createdAt: new Date(),
-      Archieve: false,
+      Block: false,
       Description: discription,
       isLiked: false,
       likes: 0,
-      Comments: '',
+      Comments: 0,
       updateAt: new Date(),
       username: name,
       photoUrlOfUser: photoURL
     }
+    console.log(postdetails)
     const Postdata: PostModal = {
       uid: userId,
-      postId: this.postId + new Date()
+      postId: id
     };
     const postRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `posts/${this.postId + new Date()}`
+      `posts/${id}`
     );
 
-    this.setPostData(postdetails)
+    this.setPostData(postdetails, id)
     return postRef.set(Postdata, {
       merge: true,
     }).then(() => {
@@ -145,13 +177,15 @@ export class InstaUserService {
         messageClass: "center",
       })
       this.route.navigate([ConstantData.Path.MAIN])
+    }).catch((error) => {
+      console.log(error)
     })
 
   }
 
-  setPostData(PostDetails: Post) {
+  setPostData(PostDetails: Post, id: any) {
     const postDetailRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `postDetail/${this.postId + new Date()}`
+      `postDetail/${id}`
     );
 
     return postDetailRef.set(PostDetails, {
@@ -169,15 +203,7 @@ export class InstaUserService {
     })
   }
 
-  async getComments() {
-    let data: any = []
-    const querySnapshot = await getDocs(collection(db, "comments"));
-    querySnapshot.forEach((doc) => {
-      //console.log( doc.data());
-      data.push(doc.data())
-    });
-    this.CommentsSubject.next(data);
-  }
+
   updateCountOfPost(postid: any, userID: unknown) {
 
     let LikeData: LikesModal =
@@ -232,23 +258,31 @@ export class InstaUserService {
     return this.afs.collection('posts').valueChanges()
   }
 
-  dislikePost(postid: any, userId: string)
-  {
+  dislikePost(postid: any, userId: string) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `Likes/${postid}`
     );
     this.afs.collection("postDetail").doc(postid).update({
-      "likes" : increment(-1)
+      "likes": increment(-1)
     })
 
     return userRef.update({
-      likedUserId : arrayRemove(userId)
-    }).then(()=>{
+      likedUserId: arrayRemove(userId)
+    }).then(() => {
       console.log("removed Sucessfylly")
     })
   }
-  
+
   getDocumentFromCollection(documentId: string) {
     return this.afs.collection('users').doc(documentId).get();
+  }
+
+  blockPost(id: string) {
+    return this.afs.collection("postDetail").doc(id).update({
+      "Block": true
+    })
+  }
 }
-}
+
+
+

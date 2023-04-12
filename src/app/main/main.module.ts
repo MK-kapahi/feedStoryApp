@@ -17,7 +17,8 @@ import { VgCoreModule } from '@videogular/ngx-videogular/core';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ConstantData } from '../utils/constant';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { BlockPostComponent } from './block-post/block-post.component'
 
 const route : Routes = [
   {
@@ -36,6 +37,9 @@ const route : Routes = [
       },
       {
         path : ConstantData.Path.PROFILE , component : ProfileComponent ,
+      },
+      {
+        path : ConstantData.Path.BLOCK , component : BlockPostComponent
       }
     ]
   },
@@ -50,6 +54,7 @@ const route : Routes = [
     ShowPostComponent,
     CommentComponent,
     CommentBoxComponent,
+    BlockPostComponent,
   ],
   imports: [
     CommonModule,
@@ -61,7 +66,8 @@ const route : Routes = [
     VgControlsModule,
     VgOverlayPlayModule,
     VgBufferingModule,
-    PickerModule
+    PickerModule,
+    MatProgressSpinnerModule
   ],
   exports : [RouterModule]
 })

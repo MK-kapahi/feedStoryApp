@@ -6,7 +6,6 @@ import { getDocs, collection, getDoc, doc, updateDoc } from 'firebase/firestore'
 import { db } from 'src/environment';
 import { InstaUserService } from './insta-user.service';
 import { getAuth } from 'firebase/auth';
-import { docJoin } from './joins';
 
 const actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
@@ -37,6 +36,7 @@ export class FireBaseService {
   }
 
    SignIn(email: string, password: string) {
+    console.log("heyyyyyyyy")
     return this.auth
       .signInWithEmailAndPassword(email, password)
       .then(async (result:any) => {

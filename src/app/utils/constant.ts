@@ -23,7 +23,8 @@ export const REGEX = {
     PROFILE : 'profile',
     LOGIN : 'login',
     SIGNUP : 'sign-in',
-    FORGOT : 'forgot'
+    FORGOT : 'forgot',
+    BLOCK : 'block'
   },
 
   Upload :

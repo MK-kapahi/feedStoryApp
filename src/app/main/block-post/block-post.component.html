@@ -1,0 +1,37 @@
+<div *ngFor="let post of Posts">
+    <div class="instagram-card" *ngIf="post.Block">
+      <div class="instagram-card-header d-flex justify-content-between">
+        <img src="{{post.photoUrlOfUser}}"  alt="no image" srcset="" class="instagram-card-user-image" >
+        <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">{{post.username}}</a>
+        <div class="instagram-card-time">{{post.createdAt.toDate() | date}}</div>
+      </div>
+      <div class="intagram-card-image">
+        <img [src]=post.Url height="600px" *ngIf="post.Type===1" />
+        <video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;" muted>
+          <source [src]="post.Url" type="video/mp4" >
+        </video>
+      </div>
+  
+      <div class="instagram-card-content">
+        <div class=" d-flex justify-content-around">
+        <!-- <button (click)="LikePost(post.postId)">LIKE</button> -->
+        <p class="likes">{{post.likes}}</p>
+        <button (click)="unReportPost(post.postId)">Report</button>
+        <!-- <p><a class="instagram-card-content-user" *ngFor=" let user of LikedUserList " href="https://www.instagram.com/followmeto/">{{user}}</a></p> -->
+      </div>
+        {{post.Description}} <a class="hashtag"
+          href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a>
+        </div>
+          <!-- <button class="btn" (click)="ShowListofUsers(post.postId)">LikedBy</button> -->
+          <button class="comments" (click)="showComment =! showComment" *ngIf="post.Comments>0">show {{post.Comments}} comments</button>
+        <hr>
+      <div class="instagram-card-footer">
+        <!-- <app-comment-box (add)="onSubmit($event ,post.postId)"></app-comment-box> -->
+      </div>
+      <div *ngIf="showComment">
+        <div *ngFor="let c of Comments ">
+          <app-comment *ngIf="c.postId === post.postId" [comment]="c"></app-comment>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -24,5 +24,9 @@ export class NavbarComponent {
   {
     this.route.navigate(['main/home/profile'])
   }
-
+  
+  Block()
+  {
+    this.route.navigate(['main/home/block'])
+  }
 }

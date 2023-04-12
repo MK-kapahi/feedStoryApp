@@ -29,7 +29,6 @@ export class CommentBoxComponent {
     const text = `${commentText}${event.emoji.native}`;
 
     this.commentText = text;
-    console.log(this.value);
     }
 
     onFocus() {
