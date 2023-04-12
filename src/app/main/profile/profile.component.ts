@@ -13,11 +13,10 @@ export class ProfileComponent {
   CurrentUserPost : any =[]
   User :any =[]
   constructor(private user : InstaUserService , private join : JoinCollectionService){
-    this.user.getDetails();
-    this.user.userDetails.subscribe((response :any)=>{
-      console.log(response)
-      // this.User.push(response);
-    })
+    this.user.getDetails().subscribe((response)=>{
+      console.log(response);
+      this.User.push(response);
+    });
     this.join.CurrentUserPost() 
     this.join.commentsWithPostsAndUsers.subscribe((response)=>{
       console.log(response);

@@ -46,20 +46,7 @@ export class InstaUserService {
 
   }
 
-  async getUsers() {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-    });
-  }
-
   AllPosts() {
-    // let data: any = []
-    // const querySnapshot = await getDocs(query(collection(db, "postDetail"), orderBy("createdAt", "desc")));
-    // querySnapshot.forEach((doc) => {
-    //   data.push(doc.data())
-    // });
-    // this.AllPostSubject.next(data)
-
     let items = this.afs.collection('postDetail', ref => {
       return ref.orderBy('createdAt', 'desc')
     }).snapshotChanges().pipe(
@@ -75,18 +62,10 @@ export class InstaUserService {
   }
 
    getDetails() {
-    const uid :any= localStorage.getItem('id')
-     this.afs.collection("users").doc(uid).ref.get().then((doc: any) => {
-      if (doc.exists) {
-        //console.log(doc.data())
-        this.userDetails.next(doc.data())
-      }
-    })
-    // const qureyForCurrentUser = query(collection(db, "users"), where("uid", "==", uid));
-    // const querySnapshot = await getDocs(qureyForCurrentUser);
-    // querySnapshot.forEach((doc) => {
-    //   this.userDetails.next(doc.data())
-    // });
+    const uid :any= localStorage.getItem('id');
+
+     let document = this.afs.doc<any>('users/' + uid);
+     return document.valueChanges();
   }
   uploadImage(File: any) {
     const filePath = `images/${Date.now()}_${File.name}`;
@@ -204,13 +183,14 @@ export class InstaUserService {
   }
 
 
-  updateCountOfPost(postid: any, userID: unknown) {
+  updateCountOfPost(postid: any, userID: any) {
 
     let LikeData: LikesModal =
     {
       postId: postid,
       likedUserId: [userID]
     }
+    console.log(LikeData)
     this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
       console.log("done")
     })

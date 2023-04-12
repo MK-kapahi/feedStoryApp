@@ -9,9 +9,6 @@ import { InstaUserService } from 'src/app/service/insta-user.service';
   styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent {
-
-
-
   FileUpload!: any
   discriptionMessage : string = '';
   User : any =[] 
@@ -28,10 +25,9 @@ export class CreatePostComponent {
     this.user.GetPost.subscribe((response)=>{
       this.Posts.push(response)
     })
-    this.user.getDetails();
-    this.user.userDetails.subscribe((response: DocumentData) => {
-      this.User = response;
-      console.log(this.User)
+    this.user.getDetails().subscribe((response)=>{
+      console.log(response);
+      this.User =response;
     });
   }
     PostData()

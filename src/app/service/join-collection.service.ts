@@ -18,7 +18,7 @@ export class JoinCollectionService {
 
      CurrentUserPost()
      {
-       this.postsCollection = this.afs.collection<PostModal>('posts');
+      this.postsCollection = this.afs.collection<PostModal>('posts');
       this.postDetailCollection = this.afs.collection<Post>('postDetail');
       this.usersCollection = this.afs.collection<User>('users');
 
@@ -39,6 +39,11 @@ export class JoinCollectionService {
         });
       })
     );
+     }
+
+     AllPost()
+     {
+
      }
     }
 

@@ -1,71 +1,77 @@
 <header>
+  <div class="container" *ngFor="let detail of User">
+    <div class="profile">
+      <div class="profile-image">
+        <img [src]="detail.photoURL" alt="" />
+      </div>
 
-	<div class="container" *ngFor="let detail of User">
+      <div class="profile-user-settings">
+        <h1 class="profile-user-name">{{ detail.displayName }}</h1>
 
-		<div class="profile">
+        <button class="btn profile-edit-btn">Edit Profile</button>
 
-			<div class="profile-image">
+        <button class="btn profile-settings-btn" aria-label="profile settings">
+          <i class="fas fa-cog" aria-hidden="true"></i>
+        </button>
+      </div>
 
-				<img [src]=detail.photoURL alt="">
+      <div class="profile-stats">
+        <ul>
+          <li><span class="profile-stat-count">164</span> posts</li>
+          <li><span class="profile-stat-count">188</span> followers</li>
+          <li><span class="profile-stat-count">206</span> following</li>
+        </ul>
+      </div>
 
-			</div>
-
-			<div class="profile-user-settings">
-
-				<h1 class="profile-user-name">janedoe_</h1>
-
-				<button class="btn profile-edit-btn">Edit Profile</button>
-
-				<button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
-
-			</div>
-
-			<div class="profile-stats">
-
-				<ul>
-					<li><span class="profile-stat-count">164</span> posts</li>
-					<li><span class="profile-stat-count">188</span> followers</li>
-					<li><span class="profile-stat-count">206</span> following</li>
-				</ul>
-
-			</div>
-
-			<div class="profile-bio">
-
-				<p><span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
-
-			</div>
-
-		</div>
-		<!-- End of profile section -->
-
-	</div>
-	<!-- End of container -->
-
+      <div class="profile-bio">
+        <p>
+          <span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor sit,
+          amet consectetur adipisicing elit 📷✈️🏕️
+        </p>
+      </div>
+    </div>
+    <!-- End of profile section -->
+  </div>
+  <!-- End of container -->
 </header>
 
 <main>
-
-	<div class="container" *ngFor=" let post of CurrentUserPost">
-
-		<div class="gallery">
-
-			<div class="gallery-item" tabindex="0">
-
-				<img [src]=post.Url class="gallery-image" alt="">
-
-				<div class="gallery-item-info">
-
-					<ul>
-						<li class="gallery-item-likes"><span class="visually-hidden">post</span><i class="fas fa-heart" aria-hidden="true"></i> {{post.likes}}</li>
-						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>{{post.Comments}}</li>
-					</ul>
-
-				</div>
-
-			</div>
+  <div class="container d-flex justify-content-around">
+    <div *ngFor="let post of CurrentUserPost">
+      <div class="gallery">
+        <div class="gallery-item" tabindex="0">
+          <img
+            [src]="post.Url"
+            class="gallery-image"
+            alt=""
+            *ngIf="post.Type === 1"
+            style="width: 600px; height: 600px"
+          />
+          <video
+            controls
+            autoplay
+            *ngIf="post.Type === 2"
+            style="width: 600px; height: 600px"
+            muted
+          >
+            <source [src]="post.Url" type="video/mp4" />
+          </video>
+          <div class="gallery-item-info">
+            <ul>
+              <li class="gallery-item-likes">
+                <span class="visually-hidden">post</span
+                ><i class="fas fa-heart" aria-hidden="true"></i>
+                {{ post.likes }}
+              </li>
+              <li class="gallery-item-comments">
+                <span class="visually-hidden">Comments:</span
+                ><i class="fas fa-comment" aria-hidden="true"></i
+                >{{ post.Comments }}
+              </li>
+            </ul>
+          </div>
         </div>
-		<div class="loader"></div>
-	</div>
-
+      </div>
+    </div>
+  </div>
 </main>

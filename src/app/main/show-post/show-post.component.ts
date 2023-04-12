@@ -20,8 +20,7 @@ export class ShowPostComponent implements OnInit {
   LikedUserList :Array<string> =[]
 
   constructor(private user: InstaUserService, private commentsService: CommentReplyService, private afs: AngularFirestore ,private modalService: MdbModalService) {
-    this.user.getDetails();
-    this.user.userDetails.subscribe((response: DocumentData) => {
+    this.user.getDetails().subscribe((response)=>{
       this.currentUserDetails = response;
     });
     this.user.AllPosts().subscribe((response)=>{
@@ -67,7 +66,7 @@ export class ShowPostComponent implements OnInit {
   LikePost(postId: any) {
 
     this.user.getLikesData(postId).subscribe((response: any) => {
-      console.log(response)
+      console.log(!response)
       if (response) {
         if (response.postId === postId) {
           if (response.likedUserId.length > 0) {
