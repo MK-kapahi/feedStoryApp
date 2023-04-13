@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DocumentData } from 'firebase/firestore';
 import { CommentReplyService } from 'src/app/service/comment-reply.service';
 import { InstaUserService } from 'src/app/service/insta-user.service';
+import { ConstantData } from 'src/app/utils/constant';
 
 @Component({
   selector: 'app-block-post',
@@ -27,6 +28,6 @@ export class BlockPostComponent implements OnInit {
 
   unReportPost(id : any)
   {
-
+       this.user.blockPost(id , ConstantData.VALUE.unReport)
   }
 }

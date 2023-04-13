@@ -32,7 +32,7 @@ export class CreatePostComponent {
   }
     PostData()
     {
-      this.user.addPost( this.User.uid,this.discriptionMessage,this.URL, this.Type , this.User.displayName , this.User.photoURL).then((response)=>{
+      this.user.addPost( this.User.uid,this.discriptionMessage,this.URL, this.Type ).then((response)=>{
         console.log(response)
       })
     }

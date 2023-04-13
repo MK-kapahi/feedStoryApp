@@ -31,5 +31,11 @@ export const REGEX = {
   {
     IMAGE :1,
     VEDIO :2
+  },
+
+  VALUE :
+  {
+    Report  : true,
+    unReport : false
   }
 }

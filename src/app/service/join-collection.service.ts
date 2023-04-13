@@ -2,48 +2,75 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { User } from 'firebase/auth';
 import { Observable, combineLatest, map } from 'rxjs';
-import { PostModal, Post } from '../utils/modal';
+import { PostModal, Post, LikesModal } from '../utils/modal';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JoinCollectionService {
-
+  
   private postsCollection!: AngularFirestoreCollection<PostModal>;
   private postDetailCollection: AngularFirestoreCollection<Post> | undefined;
   private usersCollection!: AngularFirestoreCollection<User>;
+  private LikedCollection !: AngularFirestoreCollection<LikesModal>;
   commentsWithPostsAndUsers!: Observable<any[]>;
+  currentUserPost !:Observable<any[]>;
 
   constructor(private afs: AngularFirestore) {}
 
-     CurrentUserPost()
-     {
-      this.postsCollection = this.afs.collection<PostModal>('posts');
-      this.postDetailCollection = this.afs.collection<Post>('postDetail');
-      this.usersCollection = this.afs.collection<User>('users');
+  AllPost()
+  {
+       this.postsCollection = this.afs.collection<PostModal>('posts');
+       this.postDetailCollection = this.afs.collection<Post>('postDetail');
+       this.usersCollection = this.afs.collection<User>('users');
+       this.LikedCollection = this.afs.collection<LikesModal>('Likes');
 
       this.commentsWithPostsAndUsers = combineLatest([
       this.postDetailCollection.valueChanges(),
       this.postsCollection.valueChanges(),
-      this.usersCollection.valueChanges()
+      this.usersCollection.valueChanges(),
+      this.LikedCollection.valueChanges(),
     ]).pipe(
-      map(([postDetail, posts, users]) => {
+      map(([postDetail, posts, users , likes]) => {
         return postDetail.map(postDetail => {
           const post = posts.find(p => p.postId === postDetail.postId);
           const user = users.find(u => u.uid === post?.uid);
+          const Like = likes.find(l => l.postId === post?.postId)
           return {
             ...postDetail,
             photoUrl : user ? user.photoURL : '',
-            userName: user ? user.displayName : ''
+            userName: user ? user.displayName : '',
+            Likes : Like? Like.likedUserId :[],
           };
         });
       })
     );
      }
 
-     AllPost()
+     UserPost()
      {
+      this.postsCollection = this.afs.collection<PostModal>('posts');
+      this.postDetailCollection = this.afs.collection<Post>('postDetail');
+      this.usersCollection = this.afs.collection<User>('users');
 
+      this.currentUserPost = combineLatest([
+        this.postDetailCollection.valueChanges(),
+        this.postsCollection.valueChanges(),
+        this.usersCollection.valueChanges()
+      ]).pipe(
+        map(([postDetail, posts, users]) => {
+          return postDetail.map(postDetail => {
+            const post = posts.find(p => p.postId === postDetail.postId);
+            const user = users.find(u => u.uid === post?.uid);
+            return {
+              ...postDetail,
+              photoUrl : user ? user.photoURL : '',
+              userName: user ? user.displayName : '',
+              uid : user ? user.uid :'',
+            };
+          });
+        })
+      );
      }
     }
 

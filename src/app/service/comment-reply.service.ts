@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { arrayUnion, increment } from 'firebase/firestore';
 import { Comment } from '../utils/modal';
 import { v4 as uuidv4 } from 'uuid';
+import { take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +92,7 @@ export class CommentReplyService {
 
    getComments() {
     
-    return this.afs.collection("comments").valueChanges()
+    return this.afs.collection("comments").valueChanges().pipe(take (1))
     // let data: any = []
     // const querySnapshot = await getDocs(collection(db, "comments"));
     // querySnapshot.forEach((doc) => {

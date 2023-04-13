@@ -17,8 +17,6 @@ export interface User {
     likes : number ;
     Comments : number ;
     updateAt : Date;
-    username : string ;
-    photoUrlOfUser ?:string;
  }
 
  export interface PostModal 
@@ -41,4 +39,11 @@ export interface User {
  {
    postId : any;
    likedUserId :Array<any>
+ }
+
+ export interface Like {
+   id?: string;
+   userId: string;
+   postId: string;
+   timestamp: number;
  }

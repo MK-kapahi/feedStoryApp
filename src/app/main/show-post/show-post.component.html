@@ -1,7 +1,7 @@
 <div *ngFor="let post of Posts">
   <div class="instagram-card" *ngIf="!post.Block">
     <div class="instagram-card-header d-flex justify-content-between">
-      <img src="{{post.photoUrlOfUser}}"  alt="no image" srcset="" class="instagram-card-user-image" >
+      <img src="{{post.photoUrl}}"  alt="no image" srcset="" class="instagram-card-user-image" >
       <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">{{post.username}}</a>
       <div class="instagram-card-time">{{post.createdAt.toDate() | date}}</div>
     </div>
@@ -12,10 +12,13 @@
       </video>
     </div>
 
-    <div class="instagram-card-content">
-      <div class=" d-flex justify-content-around">
-      <button (click)="LikePost(post.postId)">LIKE</button>
+    <div class="instagram-card-content" >
+      <div class=" d-flex justify-content-around" >
+      <button (click)="LikePost(post.postId)" *ngIf="!post.isLiked">LIKE</button>
+      <!-- <button (click)="LikePost(post.postId)" *ngIf="post.isLiked">unLike</button> -->
+      <div>
       <p class="likes">{{post.likes}}</p>
+    </div>
       <button (click)="ReportPost(post.postId)">Report</button>
       <p><a class="instagram-card-content-user" *ngFor=" let user of LikedUserList " href="https://www.instagram.com/followmeto/">{{user}}</a></p>
     </div>

@@ -38,6 +38,7 @@
 <main>
   <div class="container d-flex justify-content-around">
     <div *ngFor="let post of CurrentUserPost">
+      <div *ngIf=" post.uid === uid">
       <div class="gallery">
         <div class="gallery-item" tabindex="0">
           <img
@@ -72,6 +73,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </main>
