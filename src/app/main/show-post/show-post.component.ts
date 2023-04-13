@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, HostBinding, HostListener, OnInit } from '@angular/core';
-import { AngularFirestore, } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { DocumentData } from 'firebase/firestore';
 import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CommentReplyService } from 'src/app/service/comment-reply.service';
@@ -19,22 +19,23 @@ export class ShowPostComponent implements OnInit {
 
   currentUserDetails: any = [];
   showComment: boolean = false;
-  LikedUserList: Array<string> = []
-  Likes: Array<string> = []
-  showUnlike: boolean = false
-  constructor(private user: InstaUserService, private join: JoinCollectionService, private commentsService: CommentReplyService, private afs: AngularFirestore, private modalService: MdbModalService) {
+  LikedUserList: Array<string> = [];
+  showUnlike: boolean = false;
+  clickcount: number = 0;
+  constructor(
+    private user: InstaUserService,
+    private join: JoinCollectionService,
+    private commentsService: CommentReplyService
+  ) {
     this.user.getDetails().subscribe((response) => {
       this.currentUserDetails = response;
     });
 
-    this.join.AllPost()
+    this.join.AllPost();
     this.join.commentsWithPostsAndUsers.subscribe((response: any) => {
-      console.log(response)
+      console.log(response);
       this.Posts = response;
-      // for (let post of this.Posts) {
-      //   this.onLoad(post.postId)
-      // }
-    })
+    });
   }
 
   messageTobeCommented: string = '';
@@ -43,7 +44,7 @@ export class ShowPostComponent implements OnInit {
   ngOnInit(): void {
     this.commentsService.getComments().subscribe((response) => {
       this.Comments = response;
-      console.log(response)
+      console.log(response);
     });
   }
   // onLoad(postId: string) {
@@ -70,40 +71,36 @@ export class ShowPostComponent implements OnInit {
       this.currentUserDetails.displayName
     );
 
-    console.log("Done")
+    console.log('Done');
   }
   LikePost(postId: any) {
-    this.user.getLikesData(postId).subscribe((response: any) => {
-      console.log(!response)
-      if (response) {
-        if (response.postId === postId) {
+    this.clickcount++;
+    if (this.clickcount === 1) {
+      this.user.getLikesData(postId).subscribe((response: any) => {
+        console.log(!response);
+        if (response) {
           if (response.likedUserId.length > 0) {
             for (let user of response.likedUserId) {
-              this.user.getDocumentFromCollection(user).subscribe((document :any) => {
-                this.LikedUserList.push(document.data().displayName)
-                console.log(this.LikedUserList)
-              });
               if (user == this.currentUserDetails.uid) {
-                console.log("userAlready liked");
-                return ;
-              }
-              else {
-                this.user.updateData(postId, this.currentUserDetails.uid)
+                console.log('userAlready liked');
                 return;
               }
             }
+          } else {
+            this.user.updateData(postId, this.currentUserDetails.uid, true , this.currentUserDetails.displayName);
           }
+        } else {
+          this.user.updateCountOfPost(postId, this.currentUserDetails.uid , this.currentUserDetails.displayName);
         }
-      }
-
-      else {
-        this.user.updateCountOfPost(postId, this.currentUserDetails.uid)
-      }
-    });
+      });
+    } else {
+      this.user.updateData(postId, this.currentUserDetails.uid, false , this.currentUserDetails.displayName);
+      this.clickcount = 0;
+    }
   }
   ReportPost(id: string) {
     this.user.blockPost(id, ConstantData.VALUE.Report).then(() => {
-      console.log("done");
-    })
+      console.log('done');
+    });
   }
 }

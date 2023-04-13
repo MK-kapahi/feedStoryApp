@@ -4,6 +4,7 @@ import { arrayUnion, increment } from 'firebase/firestore';
 import { Comment } from '../utils/modal';
 import { v4 as uuidv4 } from 'uuid';
 import { take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class CommentReplyService {
 
   // private commentsCollection!: AngularFirestoreCollection<Comment>;
   // private commentDoc!: AngularFirestoreDocument<Comment>;
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore , private toaster : ToastrService) { }
 
   addComment(message: string , id : any , name : string)
    {
@@ -27,10 +28,16 @@ export class CommentReplyService {
       postId: id,
       replies :[]
     }
-
+    
+    this.afs.collection("postDetail").doc(id).update({
+      "Comments" : increment(1)
+    })
      this.afs.collection("comments").doc(documentId).set(commentData).then(() => {
-      this.afs.collection("postDetail").doc(id).update({
-        "Comments" : increment(1)
+      console.log("Data successfully written!");
+      this.toaster.success('Comment Successfull added', 'Sucesss',
+      {
+        titleClass: "center",
+        messageClass: "center"
       })
       console.log("Data successfully written!");
     })  
@@ -38,7 +45,7 @@ export class CommentReplyService {
       console.error("Error writing document: ", error);
     });
    }
-    addReplyToComment( commentId : string , message: string  , name : string) {
+    addReplyToComment( commentId : string , message: string  , name : string , postId :string) {
 
     console.log(commentId)
     let id = uuidv4()
@@ -51,13 +58,17 @@ export class CommentReplyService {
       replies : []
     }
   
+    this.afs.collection("postDetail").doc(postId).update({
+      "Comments" : increment(1)
+    })
     this.afs.collection("comments").doc(id).set(replyData).then(() => {
 
-      this.afs.collection("postDetail").doc(id).update({
-        "Comments" : increment(1)
-      })
-    
       console.log("Data successfully written!");
+      this.toaster.success('Comment Successfull added', 'Sucesss',
+      {
+        titleClass: "center",
+        messageClass: "center"
+      })
     })  
     .catch((error: any) => {
       console.error("Error writing document: ", error);
@@ -70,20 +81,6 @@ export class CommentReplyService {
        })
   }
 
-  // addReplyToReply(commentId: string, message: string ,replyId: string,name : string) {
-  //   let id = uuidv4()
-  //   let nestedReplyData :Comment = 
-  //   {
-  //     commentId: id,
-  //     username: name,
-  //     date: new Date(),
-  //     text: message,
-  //     replies : []
-  //   }
-  
-  //   const commentRef = this.afs.collection('comments').doc(commentId);
-  //   const replyRef = commentRef.collection('replies').doc(replyId);
-  // }
 
   getNestedReply(postid : any)
   {
@@ -93,12 +90,6 @@ export class CommentReplyService {
    getComments() {
     
     return this.afs.collection("comments").valueChanges().pipe(take (1))
-    // let data: any = []
-    // const querySnapshot = await getDocs(collection(db, "comments"));
-    // querySnapshot.forEach((doc) => {
-    //   //console.log( doc.data());
-    //   data.push(doc.data())
-    // });
-    // this.CommentsSubject.next(data);
+    
   }
 }

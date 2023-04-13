@@ -32,7 +32,7 @@ export class CommentComponent {
   }
 
   addReply() {
-    this.commentService.addReplyToComment(this.id, this.replyText, this.Name);
+    this.commentService.addReplyToComment(this.id, this.replyText, this.Name , this.Postid );
   }
   showReply(id: any) {
     this.repliesShow = true;

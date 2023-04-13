@@ -41,6 +41,7 @@ export class JoinCollectionService {
             photoUrl : user ? user.photoURL : '',
             userName: user ? user.displayName : '',
             Likes : Like? Like.likedUserId :[],
+            Names : Like? Like.Likedusername :[] ,
           };
         });
       })

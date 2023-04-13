@@ -20,7 +20,7 @@
       <p class="likes">{{post.likes}}</p>
     </div>
       <button (click)="ReportPost(post.postId)">Report</button>
-      <p><a class="instagram-card-content-user" *ngFor=" let user of LikedUserList " href="https://www.instagram.com/followmeto/">{{user}}</a></p>
+      <p><a class="instagram-card-content-user" *ngFor=" let user of post.Names " href="https://www.instagram.com/followmeto/">{{user}}</a></p>
     </div>
       {{post.Description}} <a class="hashtag"
         href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a>

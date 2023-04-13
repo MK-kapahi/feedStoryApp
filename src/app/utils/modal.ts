@@ -39,6 +39,7 @@ export interface User {
  {
    postId : any;
    likedUserId :Array<any>
+   Likedusername : Array<string>
  }
 
  export interface Like {
