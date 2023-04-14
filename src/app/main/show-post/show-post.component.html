@@ -1,32 +1,35 @@
 <div *ngFor="let post of Posts">
   <div class="instagram-card" *ngIf="!post.Block">
     <div class="instagram-card-header d-flex justify-content-between">
-      <img src="{{post.photoUrl}}"  alt="no image" srcset="" class="instagram-card-user-image" >
-      <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">{{post.username}}</a>
+      <img src="{{post.photoUrl}}" alt="no image" srcset="" class="instagram-card-user-image">
+      <a class="instagram-card-user-name" href="https://www.instagram.com/followmeto/">{{post.userName}}</a>
       <div class="instagram-card-time">{{post.createdAt.toDate() | date}}</div>
     </div>
     <div class="intagram-card-image">
       <img [src]=post.Url height="600px" *ngIf="post.Type===1" />
       <video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;" muted>
-        <source [src]="post.Url" type="video/mp4" >
+        <source [src]="post.Url" type="video/mp4">
       </video>
     </div>
 
-    <div class="instagram-card-content" >
-      <div class=" d-flex justify-content-around" >
-      <button (click)="LikePost(post.postId)" *ngIf="!post.isLiked">LIKE</button>
-      <!-- <button (click)="LikePost(post.postId)" *ngIf="post.isLiked">unLike</button> -->
-      <div>
-      <p class="likes">{{post.likes}}</p>
-    </div>
-      <button (click)="ReportPost(post.postId)">Report</button>
-      <p><a class="instagram-card-content-user" *ngFor=" let user of post.Names " href="https://www.instagram.com/followmeto/">{{user}}</a></p>
-    </div>
-      {{post.Description}} <a class="hashtag"
-        href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a>
+    <div class="instagram-card-content">
+      <button (click)="LikePost(post.postId,showLike(post.postId))" *ngIf="!showLike(post.postId)">LIKE</button>
+      <button (click)="LikePost(post.postId,showLike(post.postId))" *ngIf="showLike(post.postId)">unlike</button>
+      <div class=" d-flex justify-content-around">
+        <div>
+          <p class="likes">{{post.likes}}</p>
+        </div>
+        <button type="button" class="btn btn-primary launch" data-toggle="modal" (click)="showModal()" data-target="#staticBackdrop"> <i class="fa fa-rocket"></i> Get Premium
+        </button>
+        <button (click)="ReportPost(post.postId)">Report</button>
+        <p><a class="instagram-card-content-user" *ngFor=" let user of post.Names "
+            href="https://www.instagram.com/followmeto/">{{user}}</a></p>
       </div>
-        <button class="comments" (click)="showComment =! showComment" *ngIf="post.Comments>0">show {{post.Comments}} comments</button>
-      <hr>
+      {{post.Description}} <a class="hashtag" href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a>
+    </div>
+    <button class="comments" (click)="showComment =! showComment" *ngIf="post.Comments>0">show {{post.Comments}}
+      comments</button>
+    <hr>
     <div class="instagram-card-footer">
       <app-comment-box (add)="onSubmit($event ,post.postId)"></app-comment-box>
     </div>
@@ -34,6 +37,112 @@
       <div *ngFor="let c of Comments ">
         <app-comment *ngIf="c.postId === post.postId" [comment]="c" [Postid]="post.postId"
           [Name]="currentUserDetails.displayName"></app-comment>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="card">
+  <div class="top">
+      <div class="userDeatils">
+          <div class="profileImg">
+              <img src="User.jpg" alt="user" class="cover">
+          </div>
+          <h3>Nikhil Kumar<br><span>Web Designer</span></h3>
+      </div>
+      <div class="dot">
+          <img src="dot.png" alt="dot">
+      </div>
+  </div>
+  <div class="imgBg">
+      <img src="Bg.jpg" alt="bg" class="cover">
+  </div>
+  <div class="btns">
+      <div class="left">
+          <img src="heart.png" alt="heart" class="heart" onclick="likeButton()">
+          <img src="comment.png" alt="comment">
+          <img src="share.png" alt="share">
+      </div>
+      <div class="right">
+          <img src="bookmark.png" alt="bookmark">
+      </div>
+  </div>
+  <h4 class="likes">5,489 likes</h4>
+  <h4 class="message">
+      <b>Nikhil Kumar</b>
+      Captain America: Civil War
+      <span>#ironman</span>
+      <span>#captainamerica</span>
+  </h4>
+  <h4 class="comments">View all 546 comments</h4>
+  <div class="addComments">
+      <div class="userImg">
+          <img src="User.jpg" alt="user" class="cover">
+      </div>
+      <input type="text" class="text" placeholder="Add a comment...">
+  </div>
+  <h5 class="postTime">5 hours ago</h5>
+</div> -->
+
+
+<!-- Modal  -->
+
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="text-right"> <i class="fa fa-close close" data-dismiss="modal"></i> </div>
+
+
+        <div class="row">
+
+
+          <div class="col-md-6">
+
+            <div class="text-center mt-2">
+
+              <img src="https://i.imgur.com/3dG6dJo.jpg" width="200">
+
+            </div>
+
+          </div>
+
+
+          <div class="col-md-6">
+
+
+            <div class="text-white mt-5">
+
+              <h1 class="mb-0">Premium</h1>
+              <span class="intro-1">Take your writing to next level</span>
+
+              <div class="mt-4">
+
+
+                <span class="intro-2">Gain access to analytic tools, desktop apps, templates, read-through, features,
+                  and autp-translate all for the price of a pro subscription</span>
+
+              </div>
+
+
+              <div class="mt-4 mb-5">
+
+                <button class="btn btn-primary">25% off premium <i class="fa fa-long-arrow-right"></i></button>
+
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+
+
+        </div>
+
       </div>
     </div>
   </div>

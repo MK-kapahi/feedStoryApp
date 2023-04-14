@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { CommentReplyService } from 'src/app/service/comment-reply.service';
-import { InstaUserService } from 'src/app/service/insta-user.service';
 
 @Component({
   selector: 'app-comment',
@@ -18,7 +16,7 @@ export class CommentComponent {
   repliesShow: boolean = false;
   NestedReply: any = []
   isEmojiPickerVisible : boolean = false;
-  constructor(private user: InstaUserService, private commentService: CommentReplyService, private afs: AngularFireDatabase) {
+  constructor( private commentService: CommentReplyService) {
   }
 
   id: any

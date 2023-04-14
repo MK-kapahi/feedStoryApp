@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+import { collectionGroup } from 'firebase/firestore';
 import { FireBaseService } from 'src/app/service/fire-base.service';
 
 @Injectable({
@@ -9,23 +10,30 @@ export class AuthGaurdService {
 
   constructor(private router : Router ,private service : FireBaseService ) { }
   canActivate(route: ActivatedRouteSnapshot):boolean{
-    const { routeConfig } = route;
-    const { path } = routeConfig as Route;
-  if ( (path?.includes('main') )&& !this.service.isLoggedIn()) {
+  //   const { routeConfig } = route;
+  //   const { path } = routeConfig as Route;
+  // if ( (path?.includes('main') )&& !this.service.isLoggedIn()) {
 
+  //   return true;
+  // }
+  // if ((path?.includes('auth')) && !this.service.isLoggedIn()) {
+
+  //   this.router.navigate(['main/home']);
+  //   return false;
+  // }
+  // if ((path?.includes('auth') ) && this.service.isLoggedIn()) {
+
+  //   return true;
+
+  // }
+  // this.router.navigateByUrl('auth/login')
+  // return false;
+  const token =localStorage.getItem('token');
+    if(token)   
+    {
+      this.router.navigateByUrl('auth')
+      return false;
+    } 
     return true;
-  }
-  if ((path?.includes('auth')) && !this.service.isLoggedIn()) {
-
-    this.router.navigate(['main/home']);
-    return false;
-  }
-  if ((path?.includes('auth') ) && this.service.isLoggedIn()) {
-
-    return true;
-
-  }
-  this.router.navigateByUrl('auth/login')
-  return false;
 }
 }

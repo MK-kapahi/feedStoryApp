@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { User } from 'firebase/auth';
-import { Observable, combineLatest, map } from 'rxjs';
+import { Observable, combineLatest, map, take } from 'rxjs';
 import { PostModal, Post, LikesModal } from '../utils/modal';
 
 @Injectable({
@@ -27,9 +27,9 @@ export class JoinCollectionService {
 
       this.commentsWithPostsAndUsers = combineLatest([
       this.postDetailCollection.valueChanges(),
-      this.postsCollection.valueChanges(),
-      this.usersCollection.valueChanges(),
-      this.LikedCollection.valueChanges(),
+      this.postsCollection.valueChanges().pipe(take (1)),
+      this.usersCollection.valueChanges().pipe(take (1)),
+      this.LikedCollection.valueChanges().pipe(take (1)),
     ]).pipe(
       map(([postDetail, posts, users , likes]) => {
         return postDetail.map(postDetail => {

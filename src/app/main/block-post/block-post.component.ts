@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DocumentData } from 'firebase/firestore';
 import { CommentReplyService } from 'src/app/service/comment-reply.service';
 import { InstaUserService } from 'src/app/service/insta-user.service';
+import { JoinCollectionService } from 'src/app/service/join-collection.service';
 import { ConstantData } from 'src/app/utils/constant';
 
 @Component({
@@ -14,11 +15,12 @@ export class BlockPostComponent implements OnInit {
   Posts: any = [];
   showComment :boolean = false;
   Comments : any =[]
-  constructor(private user : InstaUserService , private comment : CommentReplyService){
+  constructor(private user : InstaUserService , private comment : CommentReplyService , private  join : JoinCollectionService){
   }
   ngOnInit(): void {
-    this.user.AllPosts().subscribe((response)=>{
-      this.Posts= response
+    this.join.AllPost();
+    this.join.commentsWithPostsAndUsers.subscribe((response: any) => {
+      this.Posts = response;
     });
 
     this.comment.getComments().subscribe((response)=>{
@@ -28,6 +30,6 @@ export class BlockPostComponent implements OnInit {
 
   unReportPost(id : any)
   {
-       this.user.blockPost(id , ConstantData.VALUE.unReport)
+    this.user.blockPost(id , ConstantData.VALUE.FALSE)
   }
 }

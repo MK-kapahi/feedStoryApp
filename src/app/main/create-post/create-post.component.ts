@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DocumentData } from 'firebase/firestore';
 import { map, Observable, of } from 'rxjs';
 import { InstaUserService } from 'src/app/service/insta-user.service';
+import { ConstantData } from 'src/app/utils/constant';
 
 @Component({
   selector: 'app-create-post',
@@ -14,20 +15,16 @@ export class CreatePostComponent {
   User : any =[] 
   URL : any ;
   Posts : any =[]
-  Type : number = 1;
+  Type : number = ConstantData.Upload.IMAGE ;
   isEmojiPickerVisible: boolean = false;
-  message!: string;
   uploadPercent!: Observable<number>;
   constructor(public user : InstaUserService ){
+
   }
   ngOnInit(): void {
-    this.user.getPost();
-    this.user.GetPost.subscribe((response)=>{
-      this.Posts.push(response)
-    })
-    this.user.getDetails().subscribe((response)=>{
-      console.log(response);
-      this.User =response;
+ this.user.getDetails().subscribe((response) => {
+      this.User = response;
+
     });
   }
     PostData()
@@ -37,10 +34,6 @@ export class CreatePostComponent {
       })
     }
 
-    DiscriptionEntered(event: any)
-    {
-     this.discriptionMessage = event.target.value;
-    }
     
     SelectImage(event: any)
     {
@@ -52,7 +45,7 @@ export class CreatePostComponent {
         this.user.uploadVideo(this.FileUpload).then((res:any)=>{
           console.log(res);
           this.URL = res;
-          this.Type = 2;
+          this.Type = ConstantData.Upload.VEDIO;
         })
         this.uploadPercent = this.user.uploadProgressObservable().pipe(map((progress: number) => progress))
       }

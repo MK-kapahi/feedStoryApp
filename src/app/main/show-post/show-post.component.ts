@@ -1,13 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, HostBinding, HostListener, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { DocumentData } from 'firebase/firestore';
-import { MdbModalService } from 'mdb-angular-ui-kit/modal';
+
+import { Component, OnInit } from '@angular/core';
 import { CommentReplyService } from 'src/app/service/comment-reply.service';
 import { InstaUserService } from 'src/app/service/insta-user.service';
 import { JoinCollectionService } from 'src/app/service/join-collection.service';
 import { ConstantData } from 'src/app/utils/constant';
-import { CommentComponent } from '../comment/comment.component';
 
 @Component({
   selector: 'app-show-post',
@@ -15,13 +11,10 @@ import { CommentComponent } from '../comment/comment.component';
   styleUrls: ['./show-post.component.scss'],
 })
 export class ShowPostComponent implements OnInit {
-  isLiked: boolean = false;
-
   currentUserDetails: any = [];
   showComment: boolean = false;
   LikedUserList: Array<string> = [];
-  showUnlike: boolean = false;
-  clickcount: number = 0;
+  showUnlike!: boolean;
   constructor(
     private user: InstaUserService,
     private join: JoinCollectionService,
@@ -30,38 +23,38 @@ export class ShowPostComponent implements OnInit {
     this.user.getDetails().subscribe((response) => {
       this.currentUserDetails = response;
     });
-
-    this.join.AllPost();
-    this.join.commentsWithPostsAndUsers.subscribe((response: any) => {
-      console.log(response);
-      this.Posts = response;
-    });
   }
-
   messageTobeCommented: string = '';
   Posts: any = [];
   Comments: any = [];
   ngOnInit(): void {
+    this.join.AllPost();
+    this.join.commentsWithPostsAndUsers.subscribe((response: any) => {
+      this.Posts = response;
+    });
     this.commentsService.getComments().subscribe((response) => {
       this.Comments = response;
       console.log(response);
     });
   }
-  // onLoad(postId: string) {
-  //   for (let post of this.Posts) {
-  //     console.log("hghjgjh", post)
-  //     if (post.postId === postId) {
-  //       for (let like of post.Likes) {
-  //         if (like === this.currentUserDetails.uid) {
-  //           this.showUnlike = true;
-  //         }
-  //         else {
-  //           this.showUnlike = false;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+
+  showLike(id: any) {
+    let data = []
+    for (let post of this.Posts) {
+      if (post.postId === id) {
+        data = post.Likes.find((user: any) => {
+          return user === this.currentUserDetails.uid
+        })
+      }
+    }
+    if (data) {
+      return true;
+    }
+    else {
+
+      return false;
+    }
+  }
   onSubmit($event: any, id: any) {
     console.log($event);
     this.messageTobeCommented = $event;
@@ -73,34 +66,38 @@ export class ShowPostComponent implements OnInit {
 
     console.log('Done');
   }
-  LikePost(postId: any) {
-    this.clickcount++;
-    if (this.clickcount === 1) {
+  LikePost(postId: any, like: boolean) {
+    console.log(like)
+    if (!like) {
       this.user.getLikesData(postId).subscribe((response: any) => {
-        console.log(!response);
+        console.log(response);
         if (response) {
-          if (response.likedUserId.length > 0) {
-            for (let user of response.likedUserId) {
-              if (user == this.currentUserDetails.uid) {
-                console.log('userAlready liked');
-                return;
-              }
-            }
-          } else {
-            this.user.updateData(postId, this.currentUserDetails.uid, true , this.currentUserDetails.displayName);
-          }
+
+          this.user.updateData(postId, this.currentUserDetails.uid, ConstantData.VALUE.TRUE, this.currentUserDetails.displayName).then(() => {
+            window.location.reload();
+          });
         } else {
-          this.user.updateCountOfPost(postId, this.currentUserDetails.uid , this.currentUserDetails.displayName);
+          this.user.updateCountOfPost(postId, this.currentUserDetails.uid, this.currentUserDetails.displayName).then(() => {
+            window.location.reload();
+          });
         }
       });
     } else {
-      this.user.updateData(postId, this.currentUserDetails.uid, false , this.currentUserDetails.displayName);
-      this.clickcount = 0;
+      this.user.updateData(postId, this.currentUserDetails.uid, ConstantData.VALUE.FALSE, this.currentUserDetails.displayName).then(() => {
+
+        window.location.reload();
+      });
     }
   }
   ReportPost(id: string) {
-    this.user.blockPost(id, ConstantData.VALUE.Report).then(() => {
+    this.user.blockPost(id, ConstantData.VALUE.TRUE).then(() => {
       console.log('done');
     });
+  }
+
+  showModal()
+  {
+    let div = document.getElementsByClassName('modal')[0];
+    div.classList.add('show');
   }
 }

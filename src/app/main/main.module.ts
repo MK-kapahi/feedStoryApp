@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
 import {  RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
-import { AuthGaurdService } from '../utils/gaurds/auth-gaurd.service';
 import { ProfileComponent } from './profile/profile.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +17,7 @@ import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ConstantData } from '../utils/constant';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { BlockPostComponent } from './block-post/block-post.component'
+import { BlockPostComponent } from './block-post/block-post.component';
 
 const route : Routes = [
   {
@@ -27,7 +26,7 @@ const route : Routes = [
   {
     path : ConstantData.Path.HOME , component: HomeComponent , children:[
       {
-        path:"",redirectTo:"show-Post" ,pathMatch:'full'
+        path:"",redirectTo:ConstantData.Path.SHAREPOST ,pathMatch:'full'
       },
       {
         path : ConstantData.Path.SHAREPOST , component : ShowPostComponent , 

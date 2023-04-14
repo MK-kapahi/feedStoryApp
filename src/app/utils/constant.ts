@@ -35,7 +35,8 @@ export const REGEX = {
 
   VALUE :
   {
-    Report  : true,
-    unReport : false
-  }
+    TRUE  : true,
+    FALSE : false
+  },
+
 }

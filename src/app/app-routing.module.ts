@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MainGaurdService } from './service/gaurds/main-gaurd.service';
 import { AuthGaurdService } from './utils/gaurds/auth-gaurd.service';
 
 const routes: Routes = [
@@ -10,7 +11,7 @@ const routes: Routes = [
     path:'auth' , loadChildren :() => import('./auth/auth.module').then((m)=>m.AuthModule),canActivate: [AuthGaurdService]
   },
   {
-    path : 'main' , loadChildren :()=> import('./main/main.module').then((m)=>m.MainModule),canActivate: [AuthGaurdService]
+    path : 'main' , loadChildren :()=> import('./main/main.module').then((m)=>m.MainModule), canActivate :[MainGaurdService]
   }
 ];
 

@@ -16,9 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
   providedIn: 'root'
 })
 export class InstaUserService {
-  private likesCollection: AngularFirestoreCollection<Like>;
-  private postCollection!: AngularFirestoreCollection<Post>;
-  private LikedataCollection!: AngularFirestoreCollection<LikesModal>;
+
   auth = getAuth();
   uid: string = '';
   postId: string = '';
@@ -30,9 +28,6 @@ export class InstaUserService {
   CommentsSubject = new Subject;
   private uploadProgressSubject = new Subject<any>();
   constructor(private route: Router, public afs: AngularFirestore, public Fireauth: AngularFireAuth, private store: AngularFireStorage, private toaster: ToastrService) { 
-    this.likesCollection = this.afs.collection<Like>('Like');
-    this.postCollection = this.afs.collection<Post>('postDetail')
-    this.LikedataCollection = this.afs.collection<LikesModal>('Likes')
   }
   SetUserData(user: any, data: any) {
 
@@ -101,8 +96,6 @@ export class InstaUserService {
   uploadVideo(file: any) {
     const vedioPath = `videos/${Date.now()}_${file.name}`;
     const storageRef = this.store.ref(vedioPath);
-    // const videoRef = storageRef.child(`videos/${file.name}`);
-    // const task = videoRef.put(file);
     const task = this.store.upload(vedioPath, file)
     task.percentageChanges()
       .subscribe((percent) => {
@@ -181,7 +174,6 @@ export class InstaUserService {
 
     this.afs.collection("posts").doc(id).ref.get().then((doc: any) => {
       if (doc.exists) {
-        //console.log(doc.data())
         this.GetPost.next(doc.data())
       }
     })
@@ -199,9 +191,9 @@ export class InstaUserService {
     }
     console.log(LikeData)
     this.afs.collection("postDetail").doc(postid).update({
-      "likes": increment(1)
+      "likes": increment(1),
     })
-    this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
+    return this.afs.collection("Likes").doc(postid).set(LikeData).then(() => {
       console.log("done")
     })
   }
@@ -224,7 +216,7 @@ export class InstaUserService {
     
     return userRef.update({
       likedUserId: arrayUnion(userId),
-      Likedusername :arrayRemove(name)
+      Likedusername :arrayUnion(name)
     })
 
     }
@@ -246,21 +238,6 @@ export class InstaUserService {
   getPostDetails() {
     return this.afs.collection('posts').valueChanges().pipe(take(1))
   }
-
-  // dislikePost(postid: any, userId: string) {
-  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-  //     `Likes/${postid}`
-  //   );
-  //   this.afs.collection("postDetail").doc(postid).update({
-  //     "likes": increment(-1)
-  //   })
-
-  //   return userRef.update({
-  //     likedUserId: arrayRemove(userId)
-  //   }).then(() => {
-  //     console.log("removed Sucessfylly")
-  //   })
-  // }
 
   getDocumentFromCollection(documentId: string) {
     return this.afs.collection('users').doc(documentId).get();

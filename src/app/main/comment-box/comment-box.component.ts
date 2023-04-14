@@ -10,9 +10,6 @@ import { v4 as uuid } from 'uuid';
 export class CommentBoxComponent {
   value!: string;
   @Output() add = new EventEmitter<string>();
-  @Input()
-  postId!: string;
-
   commentText = '';
  isEmojiPickerVisible: boolean= false;
   onSubmit(): void {

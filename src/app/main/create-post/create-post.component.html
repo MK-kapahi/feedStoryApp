@@ -11,7 +11,10 @@
 
                     </div>
                     <ng-template #ifpart >
-                        <img [src]=URL alt="" srcset="" style="width: 300px; height: 300px;">
+                        <img [src]=URL alt="" srcset="" style="width: 300px; height: 300px;" *ngIf="FileUpload.type==='image/jpeg'">
+                        <video controls autoplay style=" width: 300px; height: 300px;" muted *ngIf="FileUpload.type==='video/mp4'">
+                            <source [src]="URL" type="video/mp4" >
+                          </video>
                     </ng-template>
                     <ng-template #elsepart ></ng-template>
                     <div class="d-flex flex-row temp mt-5 mb-3 justify-content-around">
@@ -37,18 +40,15 @@
                           </div>
                         </div>
                       </div>
+                      <form (ngSubmit)="PostData()">
                     <div class="d-flex flex-row justify-content-around temp mt-5 mb-3 ">
                         <label> Add Description </label>
-                        <input type="text" (change)="DiscriptionEntered($event)" (focus)="onFocus()" placeholder="Type Message ..........">
-                          <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
-                        </div>
-                        <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
-
-
-                    <p class="my-1">
-                        <button type="button" (click)="PostData()" *ngIf="URL"> CreatePost </button>
-                    </p>
-
+                        <input type="text" [(ngModel)]="discriptionMessage"  name="messgae" (focus)="onFocus()" placeholder="Type Message ..........">
+                    </div>
+                    <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
+                    <button type="submit"  *ngIf="URL"> CreatePost </button>
+                </form>
+                <button type="button" (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
 
                 </div>
             </div>

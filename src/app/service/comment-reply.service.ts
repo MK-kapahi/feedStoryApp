@@ -10,9 +10,6 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root'
 })
 export class CommentReplyService {
-
-  // private commentsCollection!: AngularFirestoreCollection<Comment>;
-  // private commentDoc!: AngularFirestoreDocument<Comment>;
   constructor(private afs: AngularFirestore , private toaster : ToastrService) { }
 
   addComment(message: string , id : any , name : string)
@@ -84,7 +81,7 @@ export class CommentReplyService {
 
   getNestedReply(postid : any)
   {
-    return this.afs.collection('comments').doc(postid).valueChanges();
+    return this.afs.collection('comments').doc(postid).valueChanges().pipe(take (1));
   }
 
    getComments() {

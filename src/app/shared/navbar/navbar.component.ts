@@ -8,25 +8,29 @@ import { FireBaseService } from 'src/app/service/fire-base.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  
-  constructor(private service :FireBaseService , private route : Router){}
-  Home() {
+
+  constructor(private service: FireBaseService, private route: Router) { }
+  Home = () => {
     this.route.navigate(['main'])
   }
-  Logout() {
+  Logout = () => {
     this.service.SignOut()
   }
-  CrestePost() {
+  CrestePost = () => {
     this.route.navigate(['main/home/create-Post'])
   }
 
-  Profile()
-  {
-    this.route.navigate(['main/home/profile'])
-  }
-  
-  Block()
-  {
+  Profile = () => { this.route.navigate(['main/home/profile']) }
+
+  Block = () => {
     this.route.navigate(['main/home/block'])
   }
+
+   navButton = [ 
+    { display : ' home'  , action : this.Home},
+    { display : ' Post '  , action : this.CrestePost},
+    { display : ' Profile'  , action : this.Profile},
+    { display : ' Block'  , action : this.Block},
+    { display : ' Logout'  , action : this.Logout},
+  ]
 }
