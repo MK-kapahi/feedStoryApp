@@ -11,11 +11,16 @@ export class ProfileComponent implements OnInit {
 
   CurrentUserPost: any = []
   User: any = []
-  uid: string = ""
+  uid: string = "";
+  Image = "";
+  Bio :string= "";
+visible: Boolean = false;
+isEmojiPickerVisible: boolean = false;
   constructor(private user: InstaUserService, private join: JoinCollectionService) {
     this.user.getDetails().subscribe((response) => {
       this.uid = response.uid
       this.User.push(response);
+      console.log(this.User)
     });
   }
   ngOnInit(): void {
@@ -26,5 +31,44 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  uploadProfileImage(event :any)
+  {
+    let file = event.target.files[0];
+    console.log(file);
+    this.user.uploadImage(file).then((res:any)=>{
+      console.log(res);
+      this.Image = res;
+    })
+  }
 
+  displayStyle = "none";
+  
+  openPopup() {
+    this.displayStyle = "block";
+    let div = document.getElementsByClassName('modal')[0];
+    div.classList.add('show');
+  
+  }
+  closePopup() {
+    let div = document.getElementsByClassName('modal')[0];
+    div.classList.remove('show');
+    this.displayStyle = "none";
+  }
+
+  saveChanges(uid :string)
+  {
+    this.user.updateProfile(uid ,this.Image, this.Bio)
+  }
+
+  addEmoji(event: any) {
+    const { Bio } = this;
+    console.log(`${event.emoji.native}`)
+    const text = `${Bio}${event.emoji.native}`;
+
+    this.Bio = text;
+    }
+       
+    onFocus() {
+      this.isEmojiPickerVisible = false;
+    }
 }

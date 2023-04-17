@@ -23,7 +23,8 @@ export class CommentReplyService {
       date: new Date(),
       text: message,
       postId: id,
-      replies :[]
+      replies :[],
+      parentId : ''
     }
     
     this.afs.collection("postDetail").doc(id).update({
@@ -52,7 +53,9 @@ export class CommentReplyService {
       username: name,
       date: new Date(),
       text: message,
-      replies : []
+      replies : [],
+      postId: postId,
+      parentId : commentId
     }
   
     this.afs.collection("postDetail").doc(postId).update({

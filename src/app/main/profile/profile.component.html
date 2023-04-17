@@ -3,13 +3,14 @@
     <div class="profile">
       <div class="profile-image">
         <img [src]="detail.photoURL" alt="" />
+        <input type="file" accept='image/*' #img hidden (click)="uploadProfileImage($event)">
+        <button class="btn" (click)="openPopup()">
+          <mat-icon>add_a_photo</mat-icon>
+        </button>
       </div>
 
       <div class="profile-user-settings">
         <h1 class="profile-user-name">{{ detail.displayName }}</h1>
-
-        <button class="btn profile-edit-btn">Edit Profile</button>
-
         <button class="btn profile-settings-btn" aria-label="profile settings">
           <i class="fas fa-cog" aria-hidden="true"></i>
         </button>
@@ -19,51 +20,85 @@
       </div>
 
       <div class="profile-bio">
+        {{detail.Bio}}
       </div>
     </div>
 
   </div>
 </header>
-
+<hr>
 <main>
   <div class="container d-flex justify-content-around">
     <div *ngFor="let post of CurrentUserPost">
-      <div *ngIf=" post.uid === uid">
       <div class="gallery">
         <div class="gallery-item" tabindex="0">
-          <img
-            [src]="post.Url"
-            class="gallery-image"
-            alt=""
-            *ngIf="post.Type === 1"
-            style="width: 600px; height: 600px"
-          />
-          <video
-            controls
-            autoplay
-            *ngIf="post.Type === 2"
-            style="width: 600px; height: 600px"
-            muted
-          >
+          <img [src]="post.Url" class="gallery-image" alt="" *ngIf="post.Type === 1"
+            style="width: 600px; height: 600px" />
+          <video controls autoplay *ngIf="post.Type === 2" style="width: 600px; height: 600px" muted>
             <source [src]="post.Url" type="video/mp4" />
           </video>
           <div class="gallery-item-info">
             <ul>
               <li class="gallery-item-likes">
-                <span class="visually-hidden">post</span
-                ><i class="fas fa-heart" aria-hidden="true"></i>
+                <span class="visually-hidden">post</span><i class="fas fa-heart" aria-hidden="true"></i>
                 {{ post.likes }}
               </li>
               <li class="gallery-item-comments">
-                <span class="visually-hidden">Comments:</span
-                ><i class="fas fa-comment" aria-hidden="true"></i
-                >{{ post.Comments }}
+                <span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>{{
+                post.Comments }}
+              </li>
+              <li class="gallery-item-comments">
+                <span class="visually-hidden">Discrition:</span><i class="fas fa-comment" aria-hidden="true"></i>{{
+                post.Description }}
               </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-    </div>
   </div>
 </main>
+
+<div class="modal fade" id="staticBackdrop" [ngStyle]="{'display':displayStyle}" data-backdrop="static"
+  data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body" *ngFor=" let user of User">
+        <div class="text-right"> <i class="fa fa-close close" data-dismiss="modal"></i> </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="text-center mt-2">
+              <div *ngIf=" Image then  ifpart  ; else  elsepart"> </div>
+              <ng-template #ifpart>
+                <img [src]=Image width="200">
+              </ng-template>
+              <ng-template #elsepart>
+                <img [src]=user.photoURL width="200">
+              </ng-template>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="text-white mt-5">
+              <h1 class="mb-0">Profile</h1>
+              <span class="intro-1"></span>
+              <form>
+                <div class="mt-4">
+                  <input type="text" [(ngModel)]="Bio" name="bio" placeholder="Add Bio .........">
+                  <input type="file" accept='image/*' (change)="uploadProfileImage($event)">
+                  <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
+                  <button type="button" (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
+                </div>
+                <div class="mt-4 mb-5 d-flex justify-content-between">
+                  <button class="btn btn-primary" style="color:aquamarine;" *ngIf="Image" (click)="closePopup()">close
+                  </button>
+                  <button class="btn btn-primary" style="color:aquamarine;"  *ngIf="Image" (click)="saveChanges(user.uid)">Save
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

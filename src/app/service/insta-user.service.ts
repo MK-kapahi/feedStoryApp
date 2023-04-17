@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ConstantData } from '../utils/constant';
 import { v4 as uuidv4 } from 'uuid';
+import { data } from '../utils/testdata';
 
 
 @Injectable({
@@ -256,7 +257,21 @@ export class InstaUserService {
       })
     }
   }
+  updateProfile(uid :string, image :string, bio :string)
+  {
+  
+    return this.afs.collection("users").doc(uid).update({
+       "Bio" : bio,
+       "photoURL" : image
+    }).then(()=>{
+      this.toaster.success('Profile update successfull', " success", {
+        titleClass: "center",
+        messageClass: "center",
+      })
+    })
+  }
 }
+
 
 
 

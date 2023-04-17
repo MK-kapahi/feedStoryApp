@@ -18,7 +18,9 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ConstantData } from '../utils/constant';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BlockPostComponent } from './block-post/block-post.component';
-
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select'
 const route : Routes = [
   {
     path:"",redirectTo:ConstantData.Path.HOME,pathMatch:'full'
@@ -66,7 +68,10 @@ const route : Routes = [
     VgOverlayPlayModule,
     VgBufferingModule,
     PickerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule
   ],
   exports : [RouterModule]
 })

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommentReplyService } from 'src/app/service/comment-reply.service';
+import { JoinCollectionService } from 'src/app/service/join-collection.service';
 
 @Component({
   selector: 'app-comment',
@@ -16,12 +17,13 @@ export class CommentComponent {
   repliesShow: boolean = false;
   NestedReply: any = []
   isEmojiPickerVisible : boolean = false;
-  constructor( private commentService: CommentReplyService) {
+  constructor( private commentService: CommentReplyService , private join : JoinCollectionService ) {
   }
 
   id: any
 
-  ngOnInit() { }
+  ngOnInit() {  
+   }
 
   replyClick(commentId: any) {
     this.isEditing = !this.isEditing;
@@ -34,13 +36,18 @@ export class CommentComponent {
   }
   showReply(id: any) {
     this.repliesShow = true;
-    console.log(id)
     this.commentService.getNestedReply(id).subscribe((response: any) => {
-      console.log(response)
-      console.log(response.replies)
+      //console.log(response)
+     // console.log(response.replies)
       for (let reply of response.replies) {
-        this.commentService.getNestedReply(reply.commentId).subscribe((nestedReply: any) => {
-          this.NestedReply.push(nestedReply);
+        // this.commentService.getNestedReply(reply.commentId).subscribe((nestedReply: any) => {
+        //  this.NestedReply.push(nestedReply);
+        //  console.log(nestedReply);
+        // })
+        this.join.NestedComments(reply.commentId)
+        this.join.nestedComments.subscribe((response)=>{
+         console.log("join nested response", response)
+          this.NestedReply.push(...response);
         })
       }
     })

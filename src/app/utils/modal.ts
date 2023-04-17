@@ -4,6 +4,7 @@ export interface User {
     displayName: string;
     photoURL?: string;
     emailVerified: boolean;
+    Bio ?: string
  }
 
  export interface Post {
@@ -32,7 +33,7 @@ export interface User {
    text: string;
    postId ?: any;
    replies ?:Array<any>;
-   replyId ?: string
+   parentId ?: string;
  }
 
  export interface LikesModal

@@ -18,7 +18,7 @@ export class ShowPostComponent implements OnInit {
   constructor(
     private user: InstaUserService,
     private join: JoinCollectionService,
-    private commentsService: CommentReplyService
+    private commentsService: CommentReplyService,
   ) {
     this.user.getDetails().subscribe((response) => {
       this.currentUserDetails = response;
@@ -32,10 +32,16 @@ export class ShowPostComponent implements OnInit {
     this.join.commentsWithPostsAndUsers.subscribe((response: any) => {
       this.Posts = response;
     });
-    this.commentsService.getComments().subscribe((response) => {
+
+    this.join.allComments();
+    this.join.Comments.subscribe((response: any) => {
       this.Comments = response;
-      console.log(response);
     });
+
+    // this.commentsService.getComments().subscribe((response) => {
+    //   this.Comments = response;
+    //   console.log(response);
+    // });
   }
 
   showLike(id: any) {
@@ -95,9 +101,18 @@ export class ShowPostComponent implements OnInit {
     });
   }
 
-  showModal()
-  {
-    let div = document.getElementsByClassName('modal')[0];
-    div.classList.add('show');
+  showCommentofPost(Id: any) {
+    if (this.showComment) {
+      this.showComment = false;
+    }
+
+    else {
+      this.showComment = true;
+    }
+
+    this.Comments = this.Comments.filter((commentArray: any) => { return (commentArray.postId === Id && commentArray.parentId === '') })
+    console.log(this.Comments)
   }
+
+ 
 }

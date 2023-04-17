@@ -25,6 +25,7 @@
     "bootstrap": "^5.2.3",
     "firebase": "^9.19.1",
     "mdb-angular-ui-kit": "^4.0.0",
+    "ng-bootstrap-modal": "^1.1.19",
     "ngx-spinner": "^15.0.1",
     "ngx-toastr": "^16.1.0",
     "rxjs": "~7.8.0",
