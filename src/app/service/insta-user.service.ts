@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
 import { arrayUnion, increment, arrayRemove } from 'firebase/firestore';
-import {  LikesModal, Post, PostModal, User } from '../utils/modal';
+import { LikesModal, Post, PostModal, User } from '../utils/modal';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
-import { map, Subject, take } from 'rxjs';
+import { finalize, map, of, Subject, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ConstantData } from '../utils/constant';
@@ -22,12 +22,11 @@ export class InstaUserService {
   postId: string = '';
   userDetails = new Subject<DocumentData>
   GetPost = new Subject<DocumentData>
-  postType: string = ''
-
   PostOFAuser = new Subject<DocumentData>
   CommentsSubject = new Subject;
   private uploadProgressSubject = new Subject<any>();
-  constructor(private route: Router, public afs: AngularFirestore, public Fireauth: AngularFireAuth, private store: AngularFireStorage, private toaster: ToastrService) { 
+  Url = new Subject<string>
+  constructor(private route: Router, public afs: AngularFirestore, public Fireauth: AngularFireAuth, private store: AngularFireStorage, private toaster: ToastrService) {
   }
   SetUserData(user: any, data: any) {
 
@@ -36,7 +35,7 @@ export class InstaUserService {
       email: data.email,
       displayName: data.displayName,
       emailVerified: user.emailVerified,
-      photoURL: "https://firebasestorage.googleapis.com/v0/b/feedstoryapp-25fc5.appspot.com/o/images.png?alt=media&token=53b38a10-9c8c-466f-87c9-f694e4f1b852"
+      photoURL: ConstantData.default.Profile
     };
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
@@ -72,50 +71,41 @@ export class InstaUserService {
   uploadImage(File: any) {
     const filePath = `images/${Date.now()}_${File.name}`;
     const fileRef = this.store.ref(filePath);
-    const task = this.store.upload(filePath, File);
+    const task = fileRef.put(File);
     task.percentageChanges()
       .subscribe((percent) => {
         this.uploadProgressSubject.next(percent);
       })
-    return new Promise((resolve, reject) => {
-      task
-        .snapshotChanges()
-        .toPromise()
-        .then((res: any) => {
-          console.log(res.metadata)
-          this.postId = res.metadata.generation;
-          this.postType = res.metadata.type;
-          fileRef.getDownloadURL().subscribe((url) => {
-            resolve(url);
-          });
-        })
-        .catch((error) => reject(error));
-    });
+    return task.snapshotChanges().pipe(
+      finalize(() => {
+        let downloadURL = fileRef.getDownloadURL();
+        downloadURL.subscribe((url: any) => {
+          if (url) {
+            this.Url.next(url);
+          }
+        });
+      })
+    );
   }
 
   uploadVideo(file: any) {
     const vedioPath = `videos/${Date.now()}_${file.name}`;
     const storageRef = this.store.ref(vedioPath);
-    const task = this.store.upload(vedioPath, file)
+    const task = storageRef.put(file)
     task.percentageChanges()
       .subscribe((percent) => {
         this.uploadProgressSubject.next(percent);
       })
-    return new Promise((resolve, reject) => {
-
-      task
-        .snapshotChanges()
-        .toPromise()
-        .then((res: any) => {
-          console.log(res.metadata)
-          this.postId = res.metadata.generation;
-          this.postType = res.metadata.type;
-          storageRef.getDownloadURL().subscribe((url) => {
-            resolve(url);
-          });
-        })
-        .catch((error) => reject(error));
-    });
+    return task.snapshotChanges().pipe(
+      finalize(() => {
+        let downloadURL = storageRef.getDownloadURL();
+        downloadURL.subscribe((url: any) => {
+          if (url) {
+            this.Url.next(url);
+          }
+        });
+      })
+    );
   }
 
   uploadProgressObservable() {
@@ -180,14 +170,14 @@ export class InstaUserService {
   }
 
 
-  updateCountOfPost(postid: any, userID: any , name: string) {
+  updateCountOfPost(postid: any, userID: any, name: string) {
 
-  
+
     let LikeData: LikesModal =
     {
       postId: postid,
       likedUserId: [userID],
-      Likedusername : [name]
+      Likedusername: [name]
     }
     console.log(LikeData)
     this.afs.collection("postDetail").doc(postid).update({
@@ -202,22 +192,21 @@ export class InstaUserService {
     return this.afs.doc<any>('Likes/' + postid).valueChanges().pipe(take(1));
   }
 
-  updateData(postid: any, userId: string , like : boolean , name: string) {
+  updateData(postid: any, userId: string, like: boolean, name: string) {
 
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `Likes/${postid}`
     );
 
-    if(like)
-    {
-    this.afs.collection("postDetail").doc(postid).update({
-      "likes": increment(1)
-    })
-    
-    return userRef.update({
-      likedUserId: arrayUnion(userId),
-      Likedusername :arrayUnion(name)
-    })
+    if (like) {
+      this.afs.collection("postDetail").doc(postid).update({
+        "likes": increment(1)
+      })
+
+      return userRef.update({
+        likedUserId: arrayUnion(userId),
+        Likedusername: arrayUnion(name)
+      })
 
     }
 
@@ -228,7 +217,7 @@ export class InstaUserService {
 
       return userRef.update({
         likedUserId: arrayRemove(userId),
-        Likedusername :arrayRemove(name)
+        Likedusername: arrayRemove(name)
       }).then(() => {
         console.log("removed Sucessfylly")
       })
@@ -256,13 +245,12 @@ export class InstaUserService {
       })
     }
   }
-  updateProfile(uid :string, image :string, bio :string)
-  {
-  
+  updateProfile(uid: string, image: string, bio: string) {
+
     return this.afs.collection("users").doc(uid).update({
-       "Bio" : bio,
-       "photoURL" : image
-    }).then(()=>{
+      "Bio": bio,
+      "photoURL": image
+    }).then(() => {
       this.toaster.success('Profile update successfull', " success", {
         titleClass: "center",
         messageClass: "center",

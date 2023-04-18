@@ -43,9 +43,10 @@ export class CommentReplyService {
       console.error("Error writing document: ", error);
     });
    }
-    addReplyToComment( commentId : string , message: string  , name : string , postId :string) {
+    addReplyToComment( commentId : string , message: string  , name : string , post :string) {
 
     console.log(commentId)
+    console.log(post)
     let id = uuidv4()
     let replyData :Comment = 
     {
@@ -54,11 +55,12 @@ export class CommentReplyService {
       date: new Date(),
       text: message,
       replies : [],
-      postId: postId,
+      postId: post,
       parentId : commentId
     }
   
-    this.afs.collection("postDetail").doc(postId).update({
+    console.log(replyData)
+    this.afs.collection("postDetail").doc(post).update({
       "Comments" : increment(1)
     })
     this.afs.collection("comments").doc(id).set(replyData).then(() => {

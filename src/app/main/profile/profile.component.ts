@@ -35,7 +35,7 @@ isEmojiPickerVisible: boolean = false;
   {
     let file = event.target.files[0];
     console.log(file);
-    this.user.uploadImage(file).then((res:any)=>{
+    this.user.uploadImage(file).subscribe((res:any)=>{
       console.log(res);
       this.Image = res;
     })

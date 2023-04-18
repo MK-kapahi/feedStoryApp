@@ -42,7 +42,8 @@ export class CreatePostComponent {
 
       if(this.FileUpload.type==='video/mp4')
       {
-        this.user.uploadVideo(this.FileUpload).then((res:any)=>{
+        this.user.uploadVideo(this.FileUpload).subscribe();
+        this.user.Url.subscribe((res)=>{
           console.log(res);
           this.URL = res;
           this.Type = ConstantData.Upload.VEDIO;
@@ -51,7 +52,8 @@ export class CreatePostComponent {
       }
       else{
         console.log(this.FileUpload)
-        this.user.uploadImage(this.FileUpload).then((res:any)=>{
+        this.user.uploadImage(this.FileUpload).subscribe((res:any)=>{})
+        this.user.Url.subscribe((res)=>{
           console.log(res);
           this.URL = res;
         })

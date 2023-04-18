@@ -42,8 +42,7 @@
     </div>
     <div *ngIf="showComment">
       <div *ngFor="let c of Comments ">
-        <app-comment *ngIf=" (c.postId === post.postId && c.parentId ==='')" [comment]="c" [Postid]="post.postId"
-          [Name]="currentUserDetails.displayName"></app-comment>
+        <app-comment *ngIf="(c.postId === post.postId && c.parentId ==='')" [comment]="c"></app-comment>
       </div>
     </div>
   </div>

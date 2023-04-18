@@ -37,11 +37,6 @@ export class ShowPostComponent implements OnInit {
     this.join.Comments.subscribe((response: any) => {
       this.Comments = response;
     });
-
-    // this.commentsService.getComments().subscribe((response) => {
-    //   this.Comments = response;
-    //   console.log(response);
-    // });
   }
 
   showLike(id: any) {

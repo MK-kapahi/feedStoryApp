@@ -39,4 +39,8 @@ export const REGEX = {
     FALSE : false
   },
 
+  default :
+  {
+    Profile :"https://firebasestorage.googleapis.com/v0/b/feedstoryapp-25fc5.appspot.com/o/images.png?alt=media&token=53b38a10-9c8c-466f-87c9-f694e4f1b852"
+  }
 }
