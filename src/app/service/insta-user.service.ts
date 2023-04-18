@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/compat/firestore';
 import { arrayUnion, increment, arrayRemove } from 'firebase/firestore';
-import {  Like, LikesModal, Post, PostModal, User } from '../utils/modal';
+import {  LikesModal, Post, PostModal, User } from '../utils/modal';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { getAuth } from 'firebase/auth';
-import { map, Observable, of, Subject, take } from 'rxjs';
+import { map, Subject, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ConstantData } from '../utils/constant';
 import { v4 as uuidv4 } from 'uuid';
-import { data } from '../utils/testdata';
 
 
 @Injectable({

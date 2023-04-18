@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { User } from 'firebase/auth';
-import { Observable, combineLatest, map, take, ObservableInput } from 'rxjs';
+import { Observable, combineLatest, map, take } from 'rxjs';
 import { PostModal, Post, LikesModal, Comment } from '../utils/modal';
 
 @Injectable({

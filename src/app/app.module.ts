@@ -15,12 +15,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
-import {VgCoreModule} from '@videogular/ngx-videogular/core';
-import {VgControlsModule} from '@videogular/ngx-videogular/controls';
-import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
-import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 
@@ -44,12 +39,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     AngularFirestoreModule,
-    HttpClientModule,
     SharedModule,
-    VgCoreModule,
-    VgControlsModule,
-    VgOverlayPlayModule,
-    VgBufferingModule,
     PickerModule
   ],
   providers: [FireBaseService ],

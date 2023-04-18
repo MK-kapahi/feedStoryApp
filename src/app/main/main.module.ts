@@ -10,17 +10,14 @@ import { ShowPostComponent } from './show-post/show-post.component';
 import { CommentComponent } from './comment/comment.component';
 import { CommentBoxComponent } from './comment-box/comment-box.component';
 import { FormsModule } from '@angular/forms';
-import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
-import { VgControlsModule } from '@videogular/ngx-videogular/controls';
-import { VgCoreModule } from '@videogular/ngx-videogular/core';
-import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ConstantData } from '../utils/constant';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BlockPostComponent } from './block-post/block-post.component';
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select'
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu'
 const route : Routes = [
   {
     path:"",redirectTo:ConstantData.Path.HOME,pathMatch:'full'
@@ -63,15 +60,12 @@ const route : Routes = [
     RouterModule.forChild(route),
     MatIconModule,
     FormsModule,
-    VgCoreModule,
-    VgControlsModule,
-    VgOverlayPlayModule,
-    VgBufferingModule,
     PickerModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatMenuModule
   ],
   exports : [RouterModule]
 })

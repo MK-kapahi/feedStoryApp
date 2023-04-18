@@ -58,6 +58,9 @@ isEmojiPickerVisible: boolean = false;
   saveChanges(uid :string)
   {
     this.user.updateProfile(uid ,this.Image, this.Bio)
+    let div = document.getElementsByClassName('modal')[0];
+    div.classList.remove('show');
+    this.displayStyle = "none";
   }
 
   addEmoji(event: any) {

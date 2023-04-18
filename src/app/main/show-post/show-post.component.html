@@ -1,17 +1,15 @@
 <div *ngFor="let post of Posts">
   <div class="instagram-card" *ngIf="!post.Block">
     <div class="instagram-card-header d-flex justify-content-between">
-      <div class="instagram-card-user-image">
-      <img src="{{post.photoUrl}}" alt="no image" srcset="" >
-    </div>
-      <div class="instagram-card-user-name">{{post.userName}}</div>
-      <div class="d-flex justify-content-end">
-        <div class="instagram-card-time">{{post.createdAt.toDate() | date}}</div>
-        <div class="instagram-card-time align-self-end">
-          <button type="button" class="btn">options</button>
-        </div>
+        <img src="{{post.photoUrl}}" alt="no image" srcset="" class="instagram-card-user-image">
+      <p class="instagram-card-user-name">{{post.userName}}</p>
+        <div style="float: right; vertical-align: middle;">
+        <button mat-button [matMenuTriggerFor]="menu" class="btn"><mat-icon>more_vert</mat-icon></button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="ReportPost(post.postId)" >Block</button>
+        </mat-menu>
       </div>
-    </div>
+      </div>
     <div class="intagram-card-image">
       <img [src]=post.Url height="600px" *ngIf="post.Type===1" />
       <video controls autoplay *ngIf="post.Type===2" style=" width: 600px; height: 600px;" muted>
@@ -20,29 +18,25 @@
     </div>
 
     <div class="instagram-card-content">
-      <button (click)="LikePost(post.postId,showLike(post.postId))" *ngIf="!showLike(post.postId)">LIKE</button>
-      <button (click)="LikePost(post.postId,showLike(post.postId))" *ngIf="showLike(post.postId)">unlike</button>
-      <div class=" d-flex justify-content-around">
-        <div>
-          <p class="likes">{{post.likes}}</p>
-          <mat-form-field appearance="fill">
-            <mat-label>State</mat-label>
+      <button (click)="LikePost(post.postId,showLike(post.postId))"><mat-icon>{{!showLike(post.postId)
+          ?'thumb_up':'thumb_down'}}</mat-icon></button>
+      <div class=" d-flex ">
+        <div class="likes">
+          <mat-form-field appearance="fill" class="likes-label">
+            <mat-label >Liked by  {{post.Likes.length}} </mat-label>
             <mat-select>
-              <mat-option>None</mat-option>
               <mat-option *ngFor="let name of post.Names" [value]="name">{{name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-
-        <button (click)="ReportPost(post.postId)">Report</button>
-        <p><a class="instagram-card-content-user" *ngFor=" let user of post.Names "
-            href="https://www.instagram.com/followmeto/">{{user}}</a></p>
+        <div class="discription">
+        {{post.Description}}
+        </div>
       </div>
-      {{post.Description}} <a class="hashtag" href="https://www.instagram.com/explore/tags/visitkemi/">#visitkemi</a>
     </div>
     <button class="comments" (click)="showComment =! showComment" *ngIf="post.Comments>0">show {{post.Comments}}
       comments</button>
-    <hr>
+      <div class="instagram-card-time">{{post.createdAt.toDate() | date : 'medium'}}</div>
     <div class="instagram-card-footer">
       <app-comment-box (add)="onSubmit($event ,post.postId)"></app-comment-box>
     </div>

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { fakeAsync } from '@angular/core/testing';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FireBaseService } from 'src/app/service/fire-base.service';

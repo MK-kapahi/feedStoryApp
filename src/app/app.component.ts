@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { filter, map, Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-root',
@@ -9,9 +9,6 @@ import { filter, map, Observable, of } from 'rxjs';
 })
 export class AppComponent {
   title = 'feedStoryApp';
-
-  loading$: Observable<boolean> = of(false);
-  loading = false;
 
   constructor(private router: Router) {
   } 

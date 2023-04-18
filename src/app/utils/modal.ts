@@ -42,10 +42,3 @@ export interface User {
    likedUserId :Array<any>
    Likedusername : Array<string>
  }
-
- export interface Like {
-   id?: string;
-   userId: string;
-   postId: string;
-   timestamp: number;
- }

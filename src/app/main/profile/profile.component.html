@@ -8,22 +8,13 @@
           <mat-icon>add_a_photo</mat-icon>
         </button>
       </div>
-
       <div class="profile-user-settings">
         <h1 class="profile-user-name">{{ detail.displayName }}</h1>
-        <button class="btn profile-settings-btn" aria-label="profile settings">
-          <i class="fas fa-cog" aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <div class="profile-stats">
-      </div>
-
+      </div>  
       <div class="profile-bio">
         {{detail.Bio}}
       </div>
     </div>
-
   </div>
 </header>
 <hr>
@@ -59,6 +50,7 @@
   </div>
 </main>
 
+<!-- modal for profile -->
 <div class="modal fade" id="staticBackdrop" [ngStyle]="{'display':displayStyle}" data-backdrop="static"
   data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -83,15 +75,17 @@
               <span class="intro-1"></span>
               <form>
                 <div class="mt-4">
-                  <input type="text" [(ngModel)]="Bio" name="bio" placeholder="Add Bio .........">
+                  <input type="text" [(ngModel)]="Bio" name="bio" placeholder="Add Bio ........." (focus)="onFocus()">
                   <input type="file" accept='image/*' (change)="uploadProfileImage($event)">
-                  <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
+                  <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
+                    title="Choose your emoji"></emoji-mart>
                   <button type="button" (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
                 </div>
                 <div class="mt-4 mb-5 d-flex justify-content-between">
-                  <button class="btn btn-primary" style="color:aquamarine;" *ngIf="Image" (click)="closePopup()">close
+                  <button class="btn btn-primary" style="color:aquamarine;" *ngIf="Image"
+                    (click)="saveChanges(user.uid)">Save
                   </button>
-                  <button class="btn btn-primary" style="color:aquamarine;"  *ngIf="Image" (click)="saveChanges(user.uid)">Save
+                  <button class="btn btn-primary" style="color:aquamarine;" (click)="closePopup()">close
                   </button>
                 </div>
               </form>
