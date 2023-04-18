@@ -22,12 +22,17 @@
           ?'thumb_up':'thumb_down'}}</mat-icon></button>
       <div class=" d-flex ">
         <div class="likes">
-          <mat-form-field appearance="fill" class="likes-label">
-            <mat-label >Liked by  {{post.Likes.length}} </mat-label>
-            <mat-select>
+            <button mat-button [matMenuTriggerFor]="likes" class="btn">Liked by  {{post.Likes.length}} </button>
+            <mat-menu #likes="matMenu">
+              <ul mat-menu-item *ngFor="let name of post.Names" >
+                <li>
+                    {{name}}
+                </li>
+              </ul>
+            </mat-menu>
+            <!-- <mat-select>
               <mat-option *ngFor="let name of post.Names" [value]="name">{{name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+            </mat-select> -->
         </div>
         <div class="discription">
         {{post.Description}}
@@ -42,7 +47,7 @@
     </div>
     <div *ngIf="showComment">
       <div *ngFor="let c of Comments ">
-        <app-comment *ngIf="(c.postId === post.postId && c.parentId ==='')" [comment]="c"></app-comment>
+        <app-comment *ngIf="(c.postId === post.postId && c.parentId ==='')" [comment]="c" ></app-comment>
       </div>
     </div>
   </div>

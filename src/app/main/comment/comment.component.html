@@ -2,17 +2,17 @@
 <div class="container">
 	<div class="be-comment-block">
 		<div class="be-comment">
-			<div class="be-img-comment">	
+			<!-- <div class="be-img-comment">	
 				<a href="blog-detail-2.html">
 					<img [src]=comment.photoUrl alt="" class="be-ava-comment">
 				</a>
-			</div>
+			</div> -->
 			<div class="be-comment-content">
 					<span class="be-comment-name">
 						<p>{{comment.Name}}</p>
 						</span>
 					<span class="be-comment-time">
-						{{comment.date.toDate() | date  }}
+						{{comment.date.toDate() | date : 'medium'}}
 					</span>
 	
 				<p class="be-comment-text">
