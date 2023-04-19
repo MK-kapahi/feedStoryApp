@@ -21,9 +21,7 @@ export class CommentBoxComponent {
   }
 
   addEmoji(event: any) {
-    const { commentText } = this;
-    console.log(`${event.emoji.native}`)
-    const text = `${commentText}${event.emoji.native}`;
+    const text = `${this.commentText}${event.emoji.native}`;
 
     this.commentText = text;
     }

@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -17,7 +17,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { SharedModule } from './shared/shared.module';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-
+import {  NgxSpinner, NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -39,8 +39,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     AngularFirestoreModule,
-    SharedModule,
-    PickerModule
+    PickerModule,
+    NgxSpinnerModule
   ],
   providers: [FireBaseService ],
   bootstrap: [AppComponent],

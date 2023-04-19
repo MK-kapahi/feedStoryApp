@@ -46,4 +46,9 @@ export class SignUpComponent {
   {
       this.route.navigate(['auth/login'])
   }
+
+  inputValue(event :any)
+  {
+      console.log(event.target.value)
+  }
 }

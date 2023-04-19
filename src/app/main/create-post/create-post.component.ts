@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DocumentData } from 'firebase/firestore';
 import { map, Observable, of } from 'rxjs';
 import { InstaUserService } from 'src/app/service/insta-user.service';
 import { ConstantData } from 'src/app/utils/constant';
@@ -18,18 +17,18 @@ export class CreatePostComponent {
   Type : number = ConstantData.Upload.IMAGE ;
   isEmojiPickerVisible: boolean = false;
   uploadPercent!: Observable<number>;
-  constructor(public user : InstaUserService ){
+  constructor(public userService : InstaUserService ){
 
   }
   ngOnInit(): void {
- this.user.getDetails().subscribe((response) => {
+ this.userService.getDetails().subscribe((response) => {
       this.User = response;
 
     });
   }
     PostData()
     {
-      this.user.addPost( this.User.uid,this.discriptionMessage,this.URL, this.Type ).then((response)=>{
+      this.userService.addPost( this.User.uid,this.discriptionMessage,this.URL, this.Type ).then((response)=>{
         console.log(response)
       })
     }
@@ -42,22 +41,20 @@ export class CreatePostComponent {
 
       if(this.FileUpload.type==='video/mp4')
       {
-        this.user.uploadVideo(this.FileUpload).subscribe();
-        this.user.Url.subscribe((res)=>{
-          console.log(res);
+        this.userService.uploadVideo(this.FileUpload).subscribe();
+        this.userService.Url.subscribe((res)=>{
           this.URL = res;
           this.Type = ConstantData.Upload.VEDIO;
         })
-        this.uploadPercent = this.user.uploadProgressObservable().pipe(map((progress: number) => progress))
+        this.uploadPercent = this.userService.uploadProgressObservable().pipe(map((progress: number) => progress))
       }
       else{
         console.log(this.FileUpload)
-        this.user.uploadImage(this.FileUpload).subscribe((res:any)=>{})
-        this.user.Url.subscribe((res)=>{
-          console.log(res);
+        this.userService.uploadImage(this.FileUpload).subscribe((res:any)=>{})
+        this.userService.Url.subscribe((res)=>{
           this.URL = res;
         })
-        this.uploadPercent = this.user.uploadProgressObservable().pipe(map((progress: number) => progress))
+        this.uploadPercent = this.userService.uploadProgressObservable().pipe(map((progress: number) => progress))
       }
     }   
 
@@ -74,10 +71,7 @@ export class CreatePostComponent {
     }
 
     addEmoji(event: any) {
-    const { discriptionMessage } = this;
-    console.log(`${event.emoji.native}`)
-    const text = `${discriptionMessage}${event.emoji.native}`;
-
+    const text = `${this.discriptionMessage}${event.emoji.native}`;
     this.discriptionMessage = text;
     }
        

@@ -20,10 +20,6 @@ export class CommentComponent {
   }
 
   id!: string;
-
-  ngOnInit() {  
-   }
-
   replyClick(commentId: any , postId :string , name : string) {
     this.isEditing = !this.isEditing;
     this.id = commentId;
@@ -32,10 +28,8 @@ export class CommentComponent {
   }
 
   addReply() {
-    console.log( this.Postid)
-    console.log(this.Name)
-
     this.commentService.addReplyToComment(this.id, this.replyText, this.Name , this.Postid );
+    this.replyText=''
   }
   showReply(id: any) {
     this.repliesShow = true;
@@ -52,11 +46,8 @@ export class CommentComponent {
   }
 
   addEmoji(event: any) {
-    const { replyText } = this;
-    console.log(`${event.emoji.native}`)
-    const text = `${replyText}${event.emoji.native}`;
-
-    this.replyText = text;
+  
+    const text = `${this.replyText}${event.emoji.native}`;
     console.log(this.replyText);
     }
 

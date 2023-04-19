@@ -6,7 +6,7 @@
         <span><i class="icon icon-user"></i></span>
     </div>
     <div class="form-group">
-        <input type="text" class="form-control item" id="username" placeholder="Username" formControlName="displayName">
+        <input type="text" class="form-control item" id="username" placeholder="Username" formControlName="displayName" (input)="inputValue($event)">
         <p *ngIf="signUpForm.controls['displayName'].touched &&  signUpForm.controls['displayName'].hasError('required') || signUpForm.controls['displayName'].hasError('pattern')  "
         style="color: red"> Please Enter a Valid Name </p>
     </div>
