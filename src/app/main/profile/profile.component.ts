@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { InstaUserService } from 'src/app/service/insta-user.service';
 import { JoinCollectionService } from 'src/app/service/join-collection.service';
 
@@ -16,7 +17,7 @@ export class ProfileComponent implements OnInit {
   Bio :string= "";
 visible: Boolean = false;
 isEmojiPickerVisible: boolean = false;
-  constructor(private user: InstaUserService, private join: JoinCollectionService) {
+  constructor(private user: InstaUserService, private join: JoinCollectionService , private route : Router) {
     this.user.getDetails().subscribe((response) => {
       this.uid = response.uid
       this.User.push(response);
@@ -36,10 +37,11 @@ isEmojiPickerVisible: boolean = false;
     let file = event.target.files[0];
     console.log(file);
     this.user.uploadImage(file).subscribe((res:any)=>{
-      console.log(res);
-      this.Image = res;
-    })
-  }
+  })
+  this.user.Url.subscribe((response)=>{
+    this.Image= response
+  })
+}
 
   displayStyle = "none";
   
@@ -57,16 +59,17 @@ isEmojiPickerVisible: boolean = false;
 
   saveChanges(uid :string)
   {
-    this.user.updateProfile(uid ,this.Image, this.Bio)
+    this.user.updateProfile(uid ,this.Image, this.Bio).then(()=>{
+      this.route.navigate(["main/home"])
+    })
     let div = document.getElementsByClassName('modal')[0];
     div.classList.remove('show');
     this.displayStyle = "none";
   }
 
   addEmoji(event: any) {
-    const { Bio } = this;
     console.log(`${event.emoji.native}`)
-    const text = `${Bio}${event.emoji.native}`;
+    const text = `${this.Bio}${event.emoji.native}`;
 
     this.Bio = text;
     }

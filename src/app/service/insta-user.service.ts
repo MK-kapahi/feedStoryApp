@@ -66,7 +66,7 @@ export class InstaUserService {
     const uid: any = localStorage.getItem('id');
 
     let document = this.afs.doc<any>('users/' + uid);
-    return document.valueChanges();
+    return document.valueChanges().pipe(take(1));
   }
   uploadImage(File: any) {
     const filePath = `images/${Date.now()}_${File.name}`;
